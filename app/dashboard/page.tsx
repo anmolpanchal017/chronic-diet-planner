@@ -2,11 +2,13 @@
 
 import { useRouter } from 'next/navigation'
 import { useAppState } from '@/components/AppStateProvider'
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
-import { Flame } from 'lucide-react'
-import { ComplianceOverview } from '@/components/ComplianceGauge'
-
-const DAY_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+import Sidebar from '@/components/Sidebar'
+import VitalityScore from '@/components/VitalityScore'
+import DailyProgress from '@/components/DailyProgress'
+import AIInsight from '@/components/AIInsight'
+import QuickActions from '@/components/QuickActions'
+import TodaysMealPlan from '@/components/TodaysMealPlan'
+import { Bell, Settings } from 'lucide-react'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -14,8 +16,8 @@ export default function DashboardPage() {
 
   if (!state.weekPlan) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">No meal plan found. Please generate a plan first.</p>
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <p className="text-slate-400">No meal plan found. Please generate a plan first.</p>
       </div>
     )
   }
@@ -67,216 +69,147 @@ export default function DashboardPage() {
     ? dayProgress.reduce((sum, d) => sum + d.completionPct, 0) / dayProgress.length
     : 0
 
-  // Prepare chart data
-  const caloriesData = dayProgress.map((d, idx) => ({
-    day: DAY_SHORT[idx],
-    planned: Math.round(d.day.total_nutrition.calories),
-    consumed: Math.round(d.consumed.calories),
-  }))
+  // Calculate vitality score based on compliance
+  const vitalityScore = Math.round(Math.min(100, weeklyCompletion * 1.2))
 
-  const carbsData = dayProgress.map((d, idx) => ({
-    day: DAY_SHORT[idx],
-    planned: Math.round(d.day.total_nutrition.carbs_g),
-    consumed: Math.round(d.consumed.carbs),
-  }))
+  // Get today's meals
+  const todayMeals = activeDay?.day.meals?.slice(0, 3).map((meal) => ({
+    id: meal.id,
+    name: meal.name,
+    type: (meal.type?.toUpperCase() || 'LUNCH') as 'BREAKFAST' | 'LUNCH' | 'DINNER' | 'SNACK',
+    image_url: meal.image_url,
+    prepTime: meal.prep_time_min || 20,
+    calories: Math.round(meal.nutrition.calories),
+    tags: meal.health_benefits?.slice(0, 2),
+  })) || []
 
-  const costData = dayProgress.map((d, idx) => ({
-    day: DAY_SHORT[idx],
-    planned: d.day.total_cost_inr,
-    actual: Number((d.day.total_cost_inr * (d.completionPct / 100)).toFixed(1)),
-  }))
-
-  const nutritionData = [
-    { nutrient: 'Protein', value: Number(activeDay?.consumed.protein || 0) },
-    { nutrient: 'Carbs', value: Math.round(Number(activeDay?.consumed.carbs || 0)) },
-    { nutrient: 'Fat', value: Math.round(Number(activeDay?.consumed.fat || 0)) },
-    { nutrient: 'Fiber', value: Math.round(Number(activeDay?.day.total_nutrition.fiber_g || 0) * ((activeDay?.completionPct || 0) / 100)) },
+  // Daily Progress metrics
+  const dailyProgressMetrics = [
+    {
+      label: 'Calories',
+      value: Math.round(activeDay?.consumed.calories || 0),
+      max: Math.round(activeDay?.day.total_nutrition.calories || 2000),
+      unit: '',
+      color: '#f59e0b',
+    },
+    {
+      label: 'Protein',
+      value: Math.round(activeDay?.consumed.protein || 0),
+      max: Math.round(activeDay?.day.total_nutrition.protein_g || 100),
+      unit: 'g',
+      color: '#3b82f6',
+    },
+    {
+      label: 'Carbs',
+      value: Math.round(activeDay?.consumed.carbs || 0),
+      max: Math.round(activeDay?.day.total_nutrition.carbs_g || 200),
+      unit: 'g',
+      color: '#10b981',
+    },
+    {
+      label: 'Fats',
+      value: Math.round(activeDay?.consumed.fat || 0),
+      max: Math.round(activeDay?.day.total_nutrition.fat_g || 70),
+      unit: 'g',
+      color: '#ef4444',
+    },
   ]
 
-  const COLORS = ['#16a34a', '#2563eb', '#dc2626', '#f59e0b']
+  const handleLogMeal = () => {
+    router.push('/plan')
+  }
+
+  const handleViewFullWeek = () => {
+    router.push('/plan')
+  }
 
   return (
-    <div className="min-h-screen py-12 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 gradient-text">Dashboard</h1>
-          <p className="text-gray-600">Your personalized nutrition plan overview</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900">
+      {/* Sidebar */}
+      <Sidebar />
 
-        {/* Health Profile Summary */}
-        <div className="card p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">Your Health Profile</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm text-gray-600">Name</p>
-              <p className="text-lg font-semibold">{profile.fullName}</p>
-              <p className="text-xs text-gray-500 mt-1">Age: {profile.age}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Conditions</p>
-              <p className="text-sm font-semibold">{profile.conditions?.join(', ') || 'N/A'}</p>
-              <p className="text-xs text-gray-500 mt-1">Chronic Diseases</p>
-            </div>
+      {/* Main Content */}
+      <div className="ml-64">
+        {/* Top Bar */}
+        <header className="sticky top-0 z-30 bg-slate-900/50 border-b border-slate-700/50 backdrop-blur px-8 py-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+            <p className="text-sm text-slate-400 mt-1">Welcome back, {profile.fullName}!</p>
           </div>
-        </div>
-
-        {/* Weekly Nutrition Overview */}
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          <div className="card p-6">
-            <h3 className="text-lg font-bold mb-4">Daily Calories Trend</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={caloriesData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="planned" fill="#bbf7d0" />
-                <Bar dataKey="consumed" fill="#16a34a" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="card p-6">
-            <h3 className="text-lg font-bold mb-4">Daily Carbs Trend</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={carbsData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip formatter={value => `${value}g`} />
-                <Bar dataKey="planned" fill="#dbeafe" />
-                <Bar dataKey="consumed" fill="#3b82f6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="card p-6">
-            <h3 className="text-lg font-bold mb-4">Daily Cost Tracking</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={costData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip formatter={value => `₹${value}`} />
-                <Line type="monotone" dataKey="planned" stroke="#60a5fa" strokeWidth={2} />
-                <Line type="monotone" dataKey="actual" stroke="#2563eb" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Nutrition Breakdown */}
-        <div className="card p-6 mb-8">
-          <h3 className="text-lg font-bold mb-4">Macronutrient Breakdown</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={nutritionData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ nutrient, value }) => `${nutrient}`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {COLORS.map((color, index) => (
-                  <Cell key={`cell-${index}`} fill={color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Streak & Challenge */}
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <div className="card p-6 bg-gradient-to-br from-orange-50 to-red-50 border-l-4 border-l-orange-500">
-            <div className="flex items-center gap-3 mb-4">
-              <Flame className="w-6 h-6 text-orange-600" />
-              <h3 className="text-lg font-bold">Streak Tracker</h3>
-            </div>
-            <div className="text-4xl font-bold text-orange-600 mb-2">{streakDays} / 7 Days</div>
-            <p className="text-gray-600 text-sm">Days with at least one consumed meal ticked.</p>
-          </div>
-
-          <div className="card p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-l-4 border-l-blue-500">
-            <h3 className="text-lg font-bold mb-3">Today's Progress</h3>
-            {activeDay ? (
-              <>
-                <p className="text-sm text-gray-700 mb-3">
-                  🎯 {activeDay.completedMeals || 0} of {activeDay.totalMeals || 0} meals completed ({Math.round(activeDay.completionPct || 0)}%)
-                </p>
-                <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
-                  <div
-                    className="bg-blue-500 h-3 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(100, activeDay.completionPct || 0)}%` }}
-                  />
-                </div>
-              </>
-            ) : (
-              <p className="text-sm text-gray-600 mb-3">No meal plan data available</p>
-            )}
-            <button 
-              onClick={() => router.push('/plan')}
-              className="btn btn-primary text-sm w-full"
-            >
-              Keep Tracking
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+              <Bell className="w-5 h-5 text-slate-400" />
+            </button>
+            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+              <Settings className="w-5 h-5 text-slate-400" />
             </button>
           </div>
-        </div>
+        </header>
 
-        <div className="card p-6 mb-8">
-          <h3 className="text-lg font-bold mb-4">Weekly Goal Progress</h3>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-gray-600">Weekly Meal Completion</p>
-              <p className="text-2xl font-bold text-green-700 mt-1">{Math.round(weeklyCompletion)}%</p>
+        {/* Content */}
+        <main className="p-8">
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Vitality Score Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-1">
+                <VitalityScore score={vitalityScore} maxScore={100} />
+              </div>
+
+              {/* Right Column with Quick Stats */}
+              <div className="lg:col-span-2 space-y-6">
+                {/* Daily Progress Gauges */}
+                <DailyProgress metrics={dailyProgressMetrics} />
+              </div>
             </div>
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-gray-600">Consumed Calories (Week)</p>
-              <p className="text-2xl font-bold text-blue-700 mt-1">
-                {Math.round(dayProgress.reduce((sum, d) => sum + d.consumed.calories, 0))}
-              </p>
+
+            {/* AI Insight */}
+            <AIInsight
+              title="AI Insight"
+              description="Your insulin sensitivity is peaking. This is the optimal window for your high-protein lunch to maximize muscle protein synthesis."
+              recommendation="Eat your lunch within the next 2 hours"
+            />
+
+            {/* Quick Actions */}
+            <div>
+              <h3 className="text-xl font-bold mb-6 text-white">Quick Actions</h3>
+              <QuickActions
+                onLogMeal={handleLogMeal}
+                onAddActivity={() => alert('Coming soon!')}
+                onUpdateHealth={() => alert('Coming soon!')}
+              />
             </div>
-            <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-              <p className="text-gray-600">Creative Insight</p>
-              <p className="text-sm font-semibold text-purple-700 mt-1">
-                {weeklyCompletion >= 80 ? 'Great adherence. Keep this rhythm.' : weeklyCompletion >= 50 ? 'Good progress. Try completing snacks too.' : 'Start with breakfast tick consistency.'}
-              </p>
+
+            {/* Today's Meal Plan */}
+            <TodaysMealPlan meals={todayMeals} onViewMore={handleViewFullWeek} />
+
+            {/* Stats Footer */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 mb-6">
+              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-400 text-sm">Weekly Compliance</p>
+                    <p className="text-3xl font-bold text-blue-400 mt-2">{Math.round(weeklyCompletion)}%</p>
+                  </div>
+                  <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-2xl">
+                    ✅
+                  </div>
+                </div>
+              </div>
+
+              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-400 text-sm">Streak Days</p>
+                    <p className="text-3xl font-bold text-orange-400 mt-2">{streakDays} / 7</p>
+                  </div>
+                  <div className="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center text-2xl">
+                    🔥
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Compliance Report */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Condition-Specific Compliance</h3>
-          <ComplianceOverview conditions={profile.conditions} />
-        </div>
-
-        {/* Weekly Summary */}
-        <div className="card p-6">
-          <h3 className="text-lg font-bold mb-4">Week Summary</h3>
-          <div className="grid md:grid-cols-4 gap-4">
-            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="text-xs text-blue-600 font-semibold">Avg Daily Calories</p>
-              <p className="text-2xl font-bold text-blue-900 mt-2">{Math.round(plan.week_summary.avg_daily_calories)}</p>
-            </div>
-            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-              <p className="text-xs text-green-600 font-semibold">Avg Daily Cost</p>
-              <p className="text-2xl font-bold text-green-900 mt-2">₹{Math.round(plan.week_summary.avg_daily_cost_inr)}</p>
-            </div>
-            <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-              <p className="text-xs text-purple-600 font-semibold">Nutrition Score</p>
-              <p className="text-2xl font-bold text-purple-900 mt-2">{Math.round(plan.week_summary.nutrition_score)}/100</p>
-            </div>
-            <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <p className="text-xs text-amber-600 font-semibold">Compliance %</p>
-              <p className="text-2xl font-bold text-amber-900 mt-2">{Math.round(weeklyCompletion)}%</p>
-            </div>
-          </div>
-        </div>
+        </main>
       </div>
     </div>
   )

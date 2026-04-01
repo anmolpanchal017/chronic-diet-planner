@@ -11,20 +11,21 @@ interface Step2FormProps {
 export default function Step2Form({ profile, onUpdate }: Step2FormProps) {
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold">Food & Lifestyle Preferences</h2>
+      <h2 className="text-2xl font-bold text-white">Food & Lifestyle Preferences</h2>
 
       {/* Diet Type */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">Diet Type *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-3">Diet Type *</label>
         <div className="radio-group">
           {['Pure Vegetarian', 'Eggetarian', 'Non-Vegetarian'].map(diet => (
-            <label key={diet} className="radio-pill cursor-pointer">
+            <label key={diet} className="radio-pill cursor-pointer flex items-center">
               <input
                 type="radio"
                 name="dietType"
                 value={diet}
                 checked={profile.dietType === diet}
                 onChange={e => onUpdate({ dietType: e.target.value as any })}
+                className="accent-emerald-500"
               />
               <span className="ml-2">{diet}</span>
             </label>
@@ -34,9 +35,9 @@ export default function Step2Form({ profile, onUpdate }: Step2FormProps) {
 
       {/* Region */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Region *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-2">Region *</label>
         <select
-          className="input"
+          className="input bg-slate-800 text-white border-slate-600 focus:border-emerald-500 focus:ring-emerald-500/30"
           value={profile.region || ''}
           onChange={e => onUpdate({ region: e.target.value as any })}
         >
@@ -52,10 +53,10 @@ export default function Step2Form({ profile, onUpdate }: Step2FormProps) {
 
       {/* Allergens */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">Allergens</label>
-        <div className="grid grid-cols-2 gap-2">
+        <label className="block text-sm font-medium text-slate-300 mb-3">Allergens</label>
+        <div className="grid grid-cols-2 gap-2 text-slate-300">
           {['Gluten', 'Lactose', 'Peanuts', 'Tree nuts', 'Soy', 'Eggs', 'Shellfish'].map(allergen => (
-            <label key={allergen} className="flex items-center gap-2">
+            <label key={allergen} className="flex items-center gap-2 cursor-pointer p-2 hover:bg-slate-800/50 rounded-lg">
               <input
                 type="checkbox"
                 checked={profile.allergens?.includes(allergen) || false}
@@ -64,6 +65,7 @@ export default function Step2Form({ profile, onUpdate }: Step2FormProps) {
                   const updated = e.target.checked ? [...allergens, allergen] : allergens.filter(a => a !== allergen)
                   onUpdate({ allergens: updated })
                 }}
+                className="accent-emerald-500"
               />
               <span className="text-sm">{allergen}</span>
             </label>
@@ -75,7 +77,7 @@ export default function Step2Form({ profile, onUpdate }: Step2FormProps) {
 
       {/* Activity Level */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">Activity Level *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-3">Activity Level *</label>
         <div className="space-y-2">
           {[
             { value: 'Sedentary', label: 'Sedentary', description: 'Little or no exercise' },
@@ -83,18 +85,18 @@ export default function Step2Form({ profile, onUpdate }: Step2FormProps) {
             { value: 'Moderately Active', label: 'Moderately Active', description: '3-5 days/week moderate exercise' },
             { value: 'Very Active', label: 'Very Active', description: '6-7 days/week intense exercise' },
           ].map(level => (
-            <label key={level.value} className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+            <label key={level.value} className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-all ${profile.activityLevel === level.value ? 'bg-emerald-500/10 border-emerald-500/50' : 'border-slate-700/60 hover:bg-slate-800/50 hover:border-emerald-500/30'}`}>
               <input
                 type="radio"
                 name="activityLevel"
                 value={level.value}
                 checked={profile.activityLevel === level.value}
                 onChange={e => onUpdate({ activityLevel: e.target.value as any })}
-                className="mt-1"
+                className="mt-1 accent-emerald-500"
               />
               <div>
-                <p className="font-medium text-sm">{level.label}</p>
-                <p className="text-xs text-gray-500">{level.description}</p>
+                <p className={`font-medium text-sm ${profile.activityLevel === level.value ? 'text-emerald-300' : 'text-slate-200'}`}>{level.label}</p>
+                <p className="text-xs text-slate-400">{level.description}</p>
               </div>
             </label>
           ))}

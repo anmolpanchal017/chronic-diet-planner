@@ -29,16 +29,16 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="card p-8 max-w-md text-center">
-            <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-            <h1 className="text-xl font-bold mb-2">Oops! Something went wrong</h1>
-            <p className="text-gray-600 mb-4 text-sm">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900">
+          <div className="card p-8 max-w-md text-center bg-slate-800/90 border border-slate-700/80">
+            <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <h1 className="text-xl font-bold mb-2 text-white">Oops! Something went wrong</h1>
+            <p className="text-slate-300 mb-4 text-sm">
               {this.state.error?.message || 'An unexpected error occurred. Please refresh the page.'}
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="btn btn-primary w-full"
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-4 py-2 rounded-lg font-medium w-full transition-all duration-200 shadow-lg shadow-emerald-500/20"
             >
               Refresh Page
             </button>

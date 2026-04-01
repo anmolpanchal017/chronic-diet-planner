@@ -156,70 +156,70 @@ export default function PreviewPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 gradient-text">Budget Preview</h1>
+        <h1 className="text-3xl font-bold mb-8 text-white">Budget Preview</h1>
 
         {/* Budget Summary Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="card p-6">
-            <p className="text-sm text-gray-600 mb-1">Estimated Daily Cost</p>
+          <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+            <p className="text-sm text-slate-400 mb-1">Estimated Daily Cost</p>
             {isPriceOptimized && (
-              <p className="text-sm text-gray-500 line-through">₹{daily_cost.toLocaleString('en-IN')}</p>
+              <p className="text-sm text-slate-500 line-through">₹{daily_cost.toLocaleString('en-IN')}</p>
             )}
-            <p className="text-3xl font-bold text-green-600">₹{effectiveDailyCost.toLocaleString('en-IN')}</p>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-3xl font-bold text-emerald-400">₹{effectiveDailyCost.toLocaleString('en-IN')}</p>
+            <p className="text-xs text-slate-400 mt-2">
               From CSV dishes + PDF/user profile conditions
             </p>
           </div>
 
-          <div className="card p-6">
-            <p className="text-sm text-gray-600 mb-1">Weekly Total Cost</p>
-            <p className="text-3xl font-bold text-blue-600">₹{weekly_cost.toLocaleString('en-IN')}</p>
-            <p className="text-xs text-gray-500 mt-2">7 days × ₹{effectiveDailyCost}</p>
+          <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+            <p className="text-sm text-slate-400 mb-1">Weekly Total Cost</p>
+            <p className="text-3xl font-bold text-teal-400">₹{weekly_cost.toLocaleString('en-IN')}</p>
+            <p className="text-xs text-slate-400 mt-2">7 days × ₹{effectiveDailyCost}</p>
           </div>
 
-          <div className="card p-6">
-            <p className="text-sm text-gray-600 mb-1">Yearly Cost Projection</p>
-            <p className="text-3xl font-bold text-purple-600">₹{yearly_cost.toLocaleString('en-IN')}</p>
-            <p className="text-xs text-gray-500 mt-2">52 weeks based on CSV-driven weekly cost</p>
+          <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+            <p className="text-sm text-slate-400 mb-1">Yearly Cost Projection</p>
+            <p className="text-3xl font-bold text-purple-400">₹{yearly_cost.toLocaleString('en-IN')}</p>
+            <p className="text-xs text-slate-500 mt-2">52 weeks based on CSV-driven weekly cost</p>
           </div>
         </div>
 
         {isCostLoading && (
-          <div className="card p-3 mb-8 text-sm text-gray-600">Calculating cost from CSV data and your medical profile...</div>
+          <div className="card p-3 mb-8 text-sm text-slate-400 bg-slate-800/80 border border-slate-700/80">Calculating cost from CSV data and your medical profile...</div>
         )}
 
         {isPriceOptimized && (
-          <div className="card p-4 mb-8 bg-green-50 border border-green-200">
-            <p className="text-sm font-semibold text-green-800">Price optimized successfully</p>
-            <p className="text-sm text-green-700 mt-1">
+          <div className="card p-4 mb-8 bg-emerald-900/30 border border-emerald-500/50">
+            <p className="text-sm font-semibold text-emerald-400">Price optimized successfully</p>
+            <p className="text-sm text-emerald-500/80 mt-1">
               Daily savings: ₹{dailySavings.toLocaleString('en-IN')} | Weekly savings: ₹{weeklySavings.toLocaleString('en-IN')}
             </p>
           </div>
         )}
 
         {/* Cost Breakdown Chart */}
-        <div className="card p-6 mb-8">
-          <h3 className="text-lg font-semibold mb-4">Daily Cost Breakdown</h3>
+        <div className="card p-6 mb-8 bg-slate-800/80 border border-slate-700/80">
+          <h3 className="text-lg font-semibold mb-4 text-white">Daily Cost Breakdown</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={costData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip formatter={value => `₹${Number(value).toFixed(0)}`} />
-              <Bar dataKey="value" fill="#16A34A" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="name" stroke="#cbd5e1" />
+              <YAxis stroke="#cbd5e1" />
+              <Tooltip formatter={value => `₹${Number(value).toFixed(0)}`} contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', color: '#f8fafc' }} />
+              <Bar dataKey="value" fill="#10b981" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* PDF-Based Priorities */}
-        <div className="card p-6 mb-8">
-          <h3 className="text-lg font-semibold mb-4">PDF-Based Nutrient & Food Priorities</h3>
+        <div className="card p-6 mb-8 bg-slate-800/80 border border-slate-700/80">
+          <h3 className="text-lg font-semibold mb-4 text-white">PDF-Based Nutrient & Food Priorities</h3>
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div>
-              <p className="font-medium text-gray-800 mb-2">Target Nutrients</p>
-              <div className="space-y-1 text-gray-700">
+              <p className="font-medium text-slate-200 mb-2">Target Nutrients</p>
+              <div className="space-y-1 text-slate-400">
                 <p>Calories: {state.resolvedEnvelope.calories[0]} - {state.resolvedEnvelope.calories[1]} kcal</p>
                 <p>Protein: {state.resolvedEnvelope.protein_g[0].toFixed(0)} - {state.resolvedEnvelope.protein_g[1].toFixed(0)} g</p>
                 <p>Carbs: {state.resolvedEnvelope.carbs_g[0]} - {state.resolvedEnvelope.carbs_g[1]} g</p>
@@ -229,8 +229,8 @@ export default function PreviewPage() {
               </div>
             </div>
             <div>
-              <p className="font-medium text-gray-800 mb-2">Food Focus from PDF Conditions</p>
-              <div className="space-y-1 text-gray-700">
+              <p className="font-medium text-slate-200 mb-2">Food Focus from PDF Conditions</p>
+              <div className="space-y-1 text-slate-400">
                 {(profile.conditions || []).length > 0 ? (
                   (profile.conditions || []).map((condition) => (
                     <p key={condition}>
@@ -251,48 +251,48 @@ export default function PreviewPage() {
         </div>
 
         {/* Profie Summary */}
-        <div className="card p-6 mb-8">
-          <h3 className="text-lg font-semibold mb-4">Your Profile Summary</h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm">
+        <div className="card p-6 mb-8 bg-slate-800/80 border border-slate-700/80">
+          <h3 className="text-lg font-semibold mb-4 text-white">Your Profile Summary</h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm text-slate-300">
             <div>
-              <p className="text-gray-600">Name</p>
-              <p className="font-medium">{profile.fullName}</p>
+              <p className="text-slate-400">Name</p>
+              <p className="font-medium text-white">{profile.fullName}</p>
             </div>
             <div>
-              <p className="text-gray-600">Conditions</p>
-              <p className="font-medium">{profile.conditions?.join(', ')}</p>
+              <p className="text-slate-400">Conditions</p>
+              <p className="font-medium text-white">{profile.conditions?.join(', ')}</p>
             </div>
             <div>
-              <p className="text-gray-600">Diet Type</p>
-              <p className="font-medium">{profile.dietType}</p>
+              <p className="text-slate-400">Diet Type</p>
+              <p className="font-medium text-white">{profile.dietType}</p>
             </div>
             <div>
-              <p className="text-gray-600">Region</p>
-              <p className="font-medium">{profile.region}</p>
+              <p className="text-slate-400">Region</p>
+              <p className="font-medium text-white">{profile.region}</p>
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex gap-4">
-          <button onClick={handleOpenOptimizeWarning} className="btn btn-outline gap-2">
+          <button onClick={handleOpenOptimizeWarning} className="btn btn-outline text-slate-300 border-slate-600 hover:bg-slate-700 gap-2">
             Optimize Price
           </button>
-          <button onClick={handleGeneratePlan} disabled={isGenerating} className="btn btn-primary gap-2 flex-1">
+          <button onClick={handleGeneratePlan} disabled={isGenerating} className="btn btn-primary gap-2 flex-1 relative overflow-hidden group">
             {isGenerating ? 'Generating Plan...' : 'Yes, create my plan!'} <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
         {showOptimizeModal && (
-          <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 z-50">
-            <div className="card p-8 max-w-md">
-              <h3 className="text-lg font-semibold mb-3">Friendly Warning</h3>
-              <p className="text-sm text-gray-700 mb-6">
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="card p-8 max-w-md bg-slate-800 border border-slate-700 w-full animate-fade-in">
+              <h3 className="text-lg font-semibold mb-3 text-white">Friendly Warning</h3>
+              <p className="text-sm text-slate-300 mb-6">
                 Price optimization uses smart substitutions. The taste may vary slightly,
                 but nutrition quality and condition safety will be maintained.
               </p>
               <div className="flex gap-3">
-                <button onClick={() => setShowOptimizeModal(false)} className="btn btn-outline flex-1">
+                <button onClick={() => setShowOptimizeModal(false)} className="btn btn-outline text-slate-300 border-slate-600 hover:bg-slate-700 flex-1">
                   Cancel
                 </button>
                 <button onClick={handleConfirmOptimize} className="btn btn-primary flex-1">

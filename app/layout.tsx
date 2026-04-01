@@ -2,7 +2,6 @@
 
 import './globals.css'
 import { ReactNode } from 'react'
-import Navbar from '@/components/Navbar'
 import { AppStateProvider } from '@/components/AppStateProvider'
 import { ToastProvider } from '@/components/ToastProvider'
 
@@ -19,11 +18,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body>
+      <body className="bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900">
         <ToastProvider>
           <AppStateProvider>
-            <Navbar />
-            <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50">{children}</main>
+            <main className="min-h-screen">{children}</main>
           </AppStateProvider>
         </ToastProvider>
       </body>

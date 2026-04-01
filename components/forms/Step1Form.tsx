@@ -64,11 +64,11 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold">Personal & Medical Information</h2>
+      <h2 className="text-2xl font-bold text-white">Personal & Medical Information</h2>
 
       {/* Full Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-2">Full Name *</label>
         <input
           type="text"
           className="input"
@@ -80,7 +80,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Age */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Age *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-2">Age *</label>
         <input
           type="number"
           className="input"
@@ -94,16 +94,17 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Gender */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-2">Gender *</label>
         <div className="radio-group">
           {['Male', 'Female', 'Other'].map(gender => (
-            <label key={gender} className="radio-pill">
+            <label key={gender} className="radio-pill flex items-center">
               <input
                 type="radio"
                 name="gender"
                 value={gender}
                 checked={profile.gender === gender}
                 onChange={e => onUpdate({ gender: e.target.value as any })}
+                className="accent-emerald-500"
               />
               <span className="ml-2">{gender}</span>
             </label>
@@ -114,7 +115,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
       {/* Weight & Height with BMI */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Weight (kg) *</label>
+          <label className="block text-sm font-medium text-slate-300 mb-2">Weight (kg) *</label>
           <input
             type="number"
             className="input"
@@ -124,7 +125,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Height (cm) *</label>
+          <label className="block text-sm font-medium text-slate-300 mb-2">Height (cm) *</label>
           <input
             type="number"
             className="input"
@@ -136,11 +137,11 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
       </div>
 
       {bmi && (
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="p-4 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
           <p className="text-sm">
-            <span className="font-semibold">Your BMI: {bmi}</span>
+            <span className="font-semibold text-emerald-200">Your BMI: {bmi}</span>
             <br />
-            <span className="text-gray-600">
+            <span className="text-emerald-300/80">
               {bmi < 18.5
                 ? 'Underweight'
                 : bmi < 25
@@ -155,14 +156,15 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Conditions */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">Medical Conditions *</label>
+        <label className="block text-sm font-medium text-slate-300 mb-3">Medical Conditions *</label>
         <div className="grid grid-cols-2 gap-3">
           {(Object.keys(CONDITION_MAP) as Condition[]).map(condition => (
-            <label key={condition} className="radio-pill cursor-pointer">
+            <label key={condition} className="radio-pill cursor-pointer flex items-center p-3">
               <input
                 type="checkbox"
                 checked={profile.conditions?.includes(condition) || false}
                 onChange={() => handleConditionToggle(condition)}
+                className="accent-emerald-500"
               />
               <span className="ml-2">{CONDITION_MAP[condition]}</span>
             </label>
@@ -172,13 +174,13 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Condition Severity */}
       {profile.conditions && profile.conditions.length > 0 && (
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-4">
-          <h3 className="font-semibold text-sm">Condition Severity</h3>
+        <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg space-y-4">
+          <h3 className="font-semibold text-sm text-amber-200">Condition Severity</h3>
           {profile.conditions.map(condition => (
             <div key={condition}>
-              <label className="text-sm font-medium text-gray-700">{CONDITION_MAP[condition]}</label>
+              <label className="text-sm font-medium text-amber-100/80">{CONDITION_MAP[condition]}</label>
               <select
-                className="input mt-1"
+                className="input mt-1 bg-slate-800 text-white border-slate-600 focus:border-amber-500 focus:ring-amber-500/30"
                 value={profile.conditionSeverities?.[condition] || ''}
                 onChange={e =>
                   onUpdate({
@@ -202,15 +204,15 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
       )}
 
       {/* Lab Values */}
-      <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-        <p className="text-sm font-medium text-gray-700 mb-4">Optional Lab Values (if available)</p>
+      <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+        <p className="text-sm font-medium text-emerald-200 mb-4">Optional Lab Values (if available)</p>
         <div className="space-y-3">
           <div>
-            <label className="text-sm text-gray-600">HbA1c (%)</label>
+            <label className="text-sm text-emerald-100/80">HbA1c (%)</label>
             <input
               type="number"
               step="0.1"
-              className="input mt-1"
+              className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
               value={profile.labValues?.hbA1c || ''}
               onChange={e =>
                 onUpdate({
@@ -225,10 +227,10 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm text-gray-600">BP Systolic (mmHg)</label>
+              <label className="text-sm text-emerald-100/80">BP Systolic (mmHg)</label>
               <input
                 type="number"
-                className="input mt-1"
+                className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
                 value={profile.labValues?.bpSystolic || ''}
                 onChange={e =>
                   onUpdate({
@@ -242,10 +244,10 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
               />
             </div>
             <div>
-              <label className="text-sm text-gray-600">BP Diastolic (mmHg)</label>
+              <label className="text-sm text-emerald-100/80">BP Diastolic (mmHg)</label>
               <input
                 type="number"
-                className="input mt-1"
+                className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
                 value={profile.labValues?.bpDiastolic || ''}
                 onChange={e =>
                   onUpdate({
@@ -260,10 +262,10 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
             </div>
           </div>
           <div>
-            <label className="text-sm text-gray-600">eGFR (mL/min)</label>
+            <label className="text-sm text-emerald-100/80">eGFR (mL/min)</label>
             <input
               type="number"
-              className="input mt-1"
+              className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
               value={profile.labValues?.eGFR || ''}
               onChange={e =>
                 onUpdate({

@@ -117,25 +117,25 @@ export default function DemoProfiles() {
 
   return (
     <div className="mb-12">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">Try Demo Profiles</h3>
+      <h3 className="text-lg font-semibold text-slate-200 mb-4">Try Demo Profiles</h3>
       <div className="grid md:grid-cols-3 gap-4">
         {DEMO_PROFILES.map(demo => (
           <button
             key={demo.name}
             onClick={() => loadDemoProfile(demo.profile)}
-            className="card p-6 text-left hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer group"
+            className="card p-6 text-left hover:shadow-2xl transition-all hover:-translate-y-1 cursor-pointer group bg-slate-800/80 border-slate-700/80 hover:border-emerald-500/40 hover:shadow-emerald-500/20"
           >
             <div className="flex items-start justify-between mb-3">
-              <h4 className="font-bold text-lg">{demo.name}</h4>
-              <Zap className="w-5 h-5 text-yellow-500 group-hover:scale-110 transition-transform" />
+              <h4 className="font-bold text-lg text-white">{demo.name}</h4>
+              <Zap className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
             </div>
-            <p className="text-sm text-gray-600 mb-3">{demo.description}</p>
-            <div className="space-y-1 text-xs text-gray-500">
+            <p className="text-sm text-slate-300 mb-3">{demo.description}</p>
+            <div className="space-y-1 text-xs text-slate-400">
               <p>📋 {demo.conditions}</p>
               <p>🧘 {demo.region}</p>
               <p>💰 ₹{demo.budget}/day</p>
             </div>
-            <div className="mt-4 text-xs text-green-600 font-medium group-hover:text-green-700">
+            <div className="mt-4 text-xs text-emerald-400 font-medium group-hover:text-emerald-300 transition-colors">
               Load Profile →
             </div>
           </button>

@@ -1,405 +1,307 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAppState } from '@/components/AppStateProvider'
-import { ChevronLeft, ChevronRight, AlertCircle, Check, X } from 'lucide-react'
-import MealCard from '@/components/MealCard'
-import ConflictResolutionPanel from '@/components/ConflictResolutionPanel'
-import MealSwapModal from '@/components/MealSwapModal'
-import { Meal, SwapOption } from '@/lib/types'
+import Sidebar from '@/components/Sidebar'
+import { Bell, Settings, ChevronRight, ChevronDown } from 'lucide-react'
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-export default function PlanPage() {
+export default function MealPlanPage() {
+  const router = useRouter()
   const { state, dispatch } = useAppState()
-  const [currentDayIndex, setCurrentDayIndex] = useState(0)
-  const [expandedMealId, setExpandedMealId] = useState<string | null>(null)
-  const [swappingMealId, setSwappingMealId] = useState<string | null>(null)
+  const [expandedMeals, setExpandedMeals] = useState<Record<string, boolean>>({})
 
-  if (!state.weekPlan || !Array.isArray(state.weekPlan.days) || state.weekPlan.days.length === 0) {
+  if (!state.weekPlan) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">No meal plan found. Please generate a plan first.</p>
+      <div className="min-h-screen bg-slate-950">
+        <Sidebar />
+        <div className="ml-64 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <p className="text-slate-400 text-lg mb-4">No meal plan found.</p>
+            <button onClick={() => router.push('/onboarding')} className="btn btn-primary">
+              Create Your First Plan
+            </button>
+          </div>
         </div>
       </div>
     )
   }
 
   const plan = state.weekPlan
-  const planDays = plan.days
-  const boundedDayIndex = Math.min(currentDayIndex, Math.max(0, planDays.length - 1))
-  const currentDay = planDays[boundedDayIndex]
-  const summary = plan.week_summary || {
-    avg_daily_calories: 0,
-    avg_daily_cost_inr: 0,
-    total_weekly_cost_inr: 0,
-    nutrition_score: 0,
-    compliance_percentage: 0,
-  }
-
+  const profile = state.userProfile
   const completionHistory = state.mealCompletionHistory || []
-  const currentDayCompletions = completionHistory.filter(item => item.dayIndex === boundedDayIndex && item.consumed)
-  const consumedMealKeySet = new Set(currentDayCompletions.map(item => `${item.dayIndex}-${item.mealIndex}`))
 
-  const consumedNutrition = (currentDay.meals || []).reduce(
-    (acc, meal, mealIndex) => {
-      if (!consumedMealKeySet.has(`${boundedDayIndex}-${mealIndex}`)) return acc
-      acc.calories += Number(meal.nutrition.calories || 0)
-      acc.carbs_g += Number(meal.nutrition.carbs_g || 0)
-      acc.protein_g += Number(meal.nutrition.protein_g || 0)
-      acc.fat_g += Number(meal.nutrition.fat_g || 0)
-      acc.sodium_mg += Number(meal.nutrition.sodium_mg || 0)
-      acc.potassium_mg += Number(meal.nutrition.potassium_mg || 0)
-      acc.phosphorus_mg += Number(meal.nutrition.phosphorus_mg || 0)
-      acc.fiber_g += Number(meal.nutrition.fiber_g || 0)
-      return acc
-    },
-    {
-      calories: 0,
-      carbs_g: 0,
-      protein_g: 0,
-      fat_g: 0,
-      sodium_mg: 0,
-      potassium_mg: 0,
-      phosphorus_mg: 0,
-      fiber_g: 0,
-    }
-  )
-
-  const completedMealsCount = currentDayCompletions.length
-  const totalMealsCount = (currentDay.meals || []).length
-
-  const activeSwap = swappingMealId
-    ? (() => {
-      const [rawDay, rawMeal] = swappingMealId.split('-')
-      const dayIndex = Number(rawDay)
-      const mealIndex = Number(rawMeal)
-      if (!Number.isFinite(dayIndex) || !Number.isFinite(mealIndex)) return null
-      const day = planDays[dayIndex]
-      if (!day) return null
-      const meal = day.meals?.[mealIndex]
-      if (!meal) return null
-      return { dayIndex, mealIndex, meal }
-    })()
-    : null
-
-  const mapSwapOptionToMeal = (baseMeal: Meal, option: SwapOption): Meal => ({
-    meal_type: baseMeal.meal_type,
-    dish_id: option.dish_id,
-    dish_name: option.dish_name,
-    serving_size_g: option.serving_size_g,
-    cost_inr: option.cost_inr,
-    prep_time_min: option.prep_time_min,
-    ingredients: option.ingredients,
-    nutrition: option.nutrition,
-    gi_index: option.gi_index,
-    clinical_reason: option.clinical_reason,
-    health_benefits: option.health_benefits,
-    why_recommended: option.why_recommended,
-    validation: baseMeal.validation,
-    is_highly_recommended: option.is_highly_recommended,
-    swap_options: baseMeal.swap_options,
-    unsplash_image_url: option.unsplash_image_url,
-  })
-
-  const replaceMealInPlan = (inputPlan: typeof plan, dayIndex: number, mealIndex: number, newMeal: Meal) => {
-    const nextDays = inputPlan.days.map((day, dIdx) => {
-      if (dIdx !== dayIndex) return day
-      if (mealIndex < 0 || mealIndex >= day.meals.length) return day
-
-      const nextMeals = day.meals.map((meal, mIdx) => (mIdx === mealIndex ? newMeal : meal))
-      const totalNutrition = nextMeals.reduce(
-        (acc, meal) => {
-          acc.calories += Number(meal.nutrition.calories || 0)
-          acc.carbs_g += Number(meal.nutrition.carbs_g || 0)
-          acc.protein_g += Number(meal.nutrition.protein_g || 0)
-          acc.fat_g += Number(meal.nutrition.fat_g || 0)
-          acc.sodium_mg += Number(meal.nutrition.sodium_mg || 0)
-          acc.potassium_mg += Number(meal.nutrition.potassium_mg || 0)
-          acc.phosphorus_mg += Number(meal.nutrition.phosphorus_mg || 0)
-          acc.fiber_g += Number(meal.nutrition.fiber_g || 0)
-          return acc
-        },
-        {
-          calories: 0,
-          carbs_g: 0,
-          protein_g: 0,
-          fat_g: 0,
-          sodium_mg: 0,
-          potassium_mg: 0,
-          phosphorus_mg: 0,
-          fiber_g: 0,
-        }
-      )
-
-      return {
-        ...day,
-        meals: nextMeals,
-        total_nutrition: {
-          calories: Number(totalNutrition.calories.toFixed(1)),
-          carbs_g: Number(totalNutrition.carbs_g.toFixed(1)),
-          protein_g: Number(totalNutrition.protein_g.toFixed(1)),
-          fat_g: Number(totalNutrition.fat_g.toFixed(1)),
-          sodium_mg: Number(totalNutrition.sodium_mg.toFixed(1)),
-          potassium_mg: Number(totalNutrition.potassium_mg.toFixed(1)),
-          phosphorus_mg: Number(totalNutrition.phosphorus_mg.toFixed(1)),
-          fiber_g: Number(totalNutrition.fiber_g.toFixed(1)),
-        },
-        total_cost_inr: Number(nextMeals.reduce((sum, meal) => sum + Number(meal.cost_inr || 0), 0).toFixed(1)),
-      }
+  const toggleMealCompletion = (dayIndex: number, mealIndex: number) => {
+    const key = `${dayIndex}-${mealIndex}`
+    const isConsumed = completionHistory.some(
+      (item) => item.dayIndex === dayIndex && item.mealIndex === mealIndex && item.consumed
+    )
+    dispatch({
+      type: 'SET_MEAL_CONSUMED',
+      payload: { dayIndex, mealIndex, consumed: !isConsumed },
     })
-
-    const weeklyCalories = nextDays.reduce((sum, day) => sum + Number(day.total_nutrition.calories || 0), 0)
-    const weeklyCost = nextDays.reduce((sum, day) => sum + Number(day.total_cost_inr || 0), 0)
-
-    return {
-      ...inputPlan,
-      days: nextDays,
-      week_summary: {
-        ...inputPlan.week_summary,
-        avg_daily_calories: Number((weeklyCalories / 7).toFixed(1)),
-        avg_daily_cost_inr: Number((weeklyCost / 7).toFixed(1)),
-        total_weekly_cost_inr: Number(weeklyCost.toFixed(1)),
-      },
-    }
   }
 
-  const applySwapWithRebalance = async (dayIndex: number, mealIndex: number, option: SwapOption) => {
-    const swappedMeal = mapSwapOptionToMeal(plan.days[dayIndex].meals[mealIndex], option)
-    const swappedPlan = replaceMealInPlan(plan, dayIndex, mealIndex, swappedMeal)
-
-    try {
-      const response = await fetch('/api/rebalance-plan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          weekPlan: swappedPlan,
-          userProfile: state.userProfile,
-          resolvedEnvelope: state.resolvedEnvelope,
-          mealCompletionHistory: state.mealCompletionHistory || [],
-          swappedSlot: { dayIndex, mealIndex },
-        }),
-      })
-
-      const result = await response.json()
-      if (!response.ok || !result?.success || !result?.data) {
-        throw new Error(result?.error || 'Rebalance failed')
-      }
-
-      dispatch({ type: 'SET_WEEK_PLAN_KEEP_HISTORY', payload: result.data })
-    } catch (error) {
-      console.error('Rebalance failed, applying direct swap fallback:', error)
-      dispatch({
-        type: 'SWAP_MEAL',
-        payload: {
-          dayIndex,
-          mealIndex,
-          newMeal: swappedMeal,
-        },
-      })
-    } finally {
-      setSwappingMealId(null)
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pass':
-        return 'text-green-600'
-      case 'warn':
-        return 'text-yellow-600'
-      case 'fail':
-        return 'text-red-600'
-      default:
-        return 'text-gray-600'
-    }
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'pass':
-        return <Check className="w-4 h-4" />
-      case 'warn':
-        return <AlertCircle className="w-4 h-4" />
-      case 'fail':
-        return <X className="w-4 h-4" />
-      default:
-        return null
-    }
+  const toggleDetails = (e: React.MouseEvent, dayIndex: number, mealIndex: number) => {
+    e.stopPropagation()
+    const key = `${dayIndex}-${mealIndex}`
+    setExpandedMeals(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }))
   }
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 gradient-text">Your 7-Day Meal Plan</h1>
-          <p className="text-gray-600">Personalized for your health conditions and preferences</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900">
+      <Sidebar />
 
-        {/* Conflict Resolution Panel */}
-        {plan.conflict_resolutions && plan.conflict_resolutions.length > 0 && (
-          <ConflictResolutionPanel conflicts={plan.conflict_resolutions} />
-        )}
-
-        {/* Summary Cards */}
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <div className="card p-4">
-            <p className="text-xs text-gray-600">Avg Daily Calories</p>
-            <p className="text-2xl font-bold text-green-600">{Math.round(summary.avg_daily_calories)}</p>
-            <p className="text-xs text-gray-500 mt-1">kcal</p>
+      <div className="ml-64">
+        {/* Top Bar */}
+        <header className="sticky top-0 z-30 bg-slate-900/50 border-b border-slate-700/50 backdrop-blur px-8 py-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Your 7-Day Meal Plan</h1>
+            <p className="text-sm text-slate-400 mt-1">Week of {new Date().toLocaleDateString()}</p>
           </div>
-          <div className="card p-4">
-            <p className="text-xs text-gray-600">Weekly Cost</p>
-            <p className="text-2xl font-bold text-blue-600">₹{summary.total_weekly_cost_inr.toLocaleString('en-IN')}</p>
-            <p className="text-xs text-gray-500 mt-1">{summary.avg_daily_cost_inr.toFixed(0)} per day</p>
-          </div>
-          <div className="card p-4">
-            <p className="text-xs text-gray-600">Nutrition Score</p>
-            <p className="text-2xl font-bold text-purple-600">{summary.nutrition_score}/100</p>
-            <p className="text-xs text-gray-500 mt-1">Quality</p>
-          </div>
-          <div className="card p-4">
-            <p className="text-xs text-gray-600">Compliance</p>
-            <p className="text-2xl font-bold text-orange-600">{summary.compliance_percentage.toFixed(0)}%</p>
-            <p className="text-xs text-gray-500 mt-1">Target met</p>
-          </div>
-        </div>
-
-        {/* Day Selector */}
-        <div className="card p-4 mb-8">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setCurrentDayIndex(Math.max(0, currentDayIndex - 1))}
-              className="btn btn-secondary"
-              disabled={boundedDayIndex === 0}
-            >
-              <ChevronLeft className="w-4 h-4" />
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+              <Bell className="w-5 h-5 text-slate-400" />
             </button>
-
-            <div className="flex gap-2 flex-wrap justify-center">
-              {planDays.map((dayData, idx) => (
-                <button
-                  key={`${dayData.day_name || 'day'}-${idx}`}
-                  onClick={() => setCurrentDayIndex(idx)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                    currentDayIndex === idx
-                      ? 'bg-green-600 text-white'
-                      : `${getStatusColor(dayData.validation_status)} border border-gray-200 hover:bg-gray-50`
-                  }`}
-                >
-                  {(dayData.day_name || DAYS[idx] || `Day ${idx + 1}`).slice(0, 3)}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setCurrentDayIndex(Math.min(planDays.length - 1, currentDayIndex + 1))}
-              className="btn btn-secondary"
-              disabled={boundedDayIndex >= planDays.length - 1}
-            >
-              <ChevronRight className="w-4 h-4" />
+            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+              <Settings className="w-5 h-5 text-slate-400" />
             </button>
           </div>
-        </div>
+        </header>
 
-        {/* Current Day Details */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">
-            {DAYS[boundedDayIndex] || `Day ${boundedDayIndex + 1}`} — {currentDay.day_name || `Day ${boundedDayIndex + 1}`}
-          </h2>
+        {/* Content */}
+        <main className="p-8">
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+                <p className="text-slate-400 text-sm font-medium">Total Days in Plan</p>
+                <p className="text-4xl font-bold text-emerald-400 mt-2">7</p>
+                <p className="text-xs text-slate-500 mt-2">Complete week coverage</p>
+              </div>
 
-          {/* Daily Stats */}
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
-            <div className="card p-4">
-              <p className="text-sm font-medium text-gray-700 mb-2">Consumed Nutrition (Today)</p>
-              <div className="space-y-1 text-sm">
-                <p>🔥 Calories: {Math.round(consumedNutrition.calories)} / {Math.round(currentDay.total_nutrition.calories)} kcal</p>
-                <p>🥗 Carbs: {consumedNutrition.carbs_g.toFixed(1)} / {currentDay.total_nutrition.carbs_g}g</p>
-                <p>🥚 Protein: {consumedNutrition.protein_g.toFixed(1)} / {currentDay.total_nutrition.protein_g}g</p>
-                <p>🧈 Fat: {consumedNutrition.fat_g.toFixed(1)} / {currentDay.total_nutrition.fat_g}g</p>
+              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+                <p className="text-slate-400 text-sm font-medium">Avg Daily Cost</p>
+                <p className="text-4xl font-bold text-blue-400 mt-2">₹{Math.round(plan.week_summary.avg_daily_cost_inr)}</p>
+                <p className="text-xs text-slate-500 mt-2">Within your budget</p>
+              </div>
+
+              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+                <p className="text-slate-400 text-sm font-medium">Nutrition Score</p>
+                <p className="text-4xl font-bold text-purple-400 mt-2">{Math.round(plan.week_summary.nutrition_score)}/100</p>
+                <p className="text-xs text-slate-500 mt-2">Excellent compliance</p>
+              </div>
+
+              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+                <p className="text-slate-400 text-sm font-medium">Total Cost</p>
+                <p className="text-4xl font-bold text-orange-400 mt-2">₹{Math.round(plan.week_summary.avg_daily_cost_inr * 7)}</p>
+                <p className="text-xs text-slate-500 mt-2">For the week</p>
               </div>
             </div>
 
-            <div className="card p-4">
-              <p className="text-sm font-medium text-gray-700 mb-2">Critical Nutrients</p>
-              <div className="space-y-1 text-sm">
-                <p>🧂 Sodium: {consumedNutrition.sodium_mg.toFixed(0)} / {currentDay.total_nutrition.sodium_mg}mg</p>
-                <p>🍌 Potassium: {consumedNutrition.potassium_mg.toFixed(0)} / {currentDay.total_nutrition.potassium_mg}mg</p>
-                <p>⚛️ Phosphorus: {consumedNutrition.phosphorus_mg.toFixed(0)} / {currentDay.total_nutrition.phosphorus_mg}mg</p>
-                <p>🌾 Fiber: {consumedNutrition.fiber_g.toFixed(1)} / {currentDay.total_nutrition.fiber_g}g</p>
+            {/* Weekly Meal Plan */}
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-6">Weekly Menu</h2>
+              <div className="space-y-6">
+                {plan.days.map((day, dayIndex) => (
+                  <div key={dayIndex} className="card overflow-hidden">
+                    {/* Day Header */}
+                    <div className="bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-4 text-white">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xl font-bold">{DAY_NAMES[dayIndex]}</h3>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right">
+                            <p className="text-sm opacity-90">Daily Total</p>
+                            <p className="text-2xl font-bold">{Math.round(day.total_nutrition.calories)} kcal</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm opacity-90">Cost</p>
+                            <p className="text-2xl font-bold">₹{Math.round(day.total_cost_inr)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Meals */}
+                    <div className="p-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {(day.meals || []).map((meal, mealIndex) => {
+                          const mealKey = `${dayIndex}-${mealIndex}`
+                          const isExpanded = !!expandedMeals[mealKey]
+                          const isConsumed = completionHistory.some(
+                            (item) =>
+                              item.dayIndex === dayIndex &&
+                              item.mealIndex === mealIndex &&
+                              item.consumed
+                          )
+
+                          return (
+                            <div
+                              key={mealIndex}
+                              className={`card p-6 border-2 transition-all cursor-pointer ${
+                                isConsumed
+                                  ? 'bg-emerald-900/30 border-emerald-500/50'
+                                  : 'bg-slate-800/80 border-slate-700/80 hover:border-emerald-500/50'
+                              }`}
+                              onClick={() => toggleMealCompletion(dayIndex, mealIndex)}
+                            >
+                              <div className="flex items-start justify-between mb-4">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="badge badge-primary text-xs">
+                                      {(meal.meal_type || 'lunch').toUpperCase()}
+                                    </span>
+                                    {isConsumed && (
+                                      <span className="badge badge-success text-xs">✓ Consumed</span>
+                                    )}
+                                  </div>
+                                  <h4 className="font-bold text-white text-lg">{meal.name}</h4>
+                                </div>
+                                <input
+                                  type="checkbox"
+                                  checked={isConsumed}
+                                  onChange={(e) => {
+                                    e.stopPropagation()
+                                    toggleMealCompletion(dayIndex, mealIndex)
+                                  }}
+                                  className="w-6 h-6 cursor-pointer accent-emerald-500"
+                                />
+                              </div>
+
+                              {meal.image_url && (
+                                <div className="w-full h-40 rounded-lg overflow-hidden mb-4 border border-slate-700/50">
+                                  <img
+                                    src={meal.image_url}
+                                    alt={meal.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                              )}
+
+                              <p className="text-sm text-slate-300 mb-4">{meal.why_recommended}</p>
+
+                              {/* Nutrition Card */}
+                              <div className="grid grid-cols-2 gap-2 mb-4 p-4 bg-slate-700/50 rounded-lg">
+                                <div>
+                                  <p className="text-xs text-slate-400">Calories</p>
+                                  <p className="font-semibold text-white">{Math.round(meal.nutrition.calories)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-slate-400">Protein</p>
+                                  <p className="font-semibold text-white">{Math.round(meal.nutrition.protein_g)}g</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-slate-400">Carbs</p>
+                                  <p className="font-semibold text-white">{Math.round(meal.nutrition.carbs_g)}g</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-slate-400">Fat</p>
+                                  <p className="font-semibold text-white">{Math.round(meal.nutrition.fat_g)}g</p>
+                                </div>
+                              </div>
+
+                              {/* Benefits */}
+                              {meal.health_benefits && meal.health_benefits.length > 0 && (
+                                <div className="mb-4">
+                                  <p className="text-xs font-semibold text-slate-400 mb-2">Health Benefits:</p>
+                                  <div className="flex flex-wrap gap-2">
+                                    {meal.health_benefits.slice(0, 3).map((benefit, idx) => (
+                                      <span key={idx} className="badge badge-success text-xs">
+                                        {benefit}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Cost & Time */}
+                              <div className="flex justify-between items-center pt-4 border-t border-slate-700">
+                                <div className="text-sm text-slate-400">
+                                  💰 ₹{meal.cost_inr || 0} • ⏱️ {meal.prep_time_min || 30}min
+                                </div>
+                                <button
+                                  onClick={(e) => toggleDetails(e, dayIndex, mealIndex)}
+                                  className="text-emerald-400 hover:text-emerald-300 text-sm font-semibold flex items-center gap-1 transition-colors"
+                                >
+                                  {isExpanded ? 'Hide Details' : 'Details'} 
+                                  {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                                </button>
+                              </div>
+
+                              {/* Expanded Details Section */}
+                              {isExpanded && (
+                                <div
+                                  className="mt-6 pt-6 border-t border-slate-700/80 animate-fade-in cursor-default"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {/* Macro breakdown */}
+                                  <div className="mb-4">
+                                    <h5 className="font-semibold text-slate-200 mb-2 text-sm">Detailed Nutrition</h5>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                      <div className="bg-slate-700/30 p-2 rounded border border-slate-600/30">
+                                        <p className="text-xs text-slate-400">Sodium</p>
+                                        <p className="font-medium text-slate-200">{Math.round(meal.nutrition.sodium_mg || 0)}mg</p>
+                                      </div>
+                                      <div className="bg-slate-700/30 p-2 rounded border border-slate-600/30">
+                                        <p className="text-xs text-slate-400">Potassium</p>
+                                        <p className="font-medium text-slate-200">{Math.round(meal.nutrition.potassium_mg || 0)}mg</p>
+                                      </div>
+                                      <div className="bg-slate-700/30 p-2 rounded border border-slate-600/30">
+                                        <p className="text-xs text-slate-400">Phosphorus</p>
+                                        <p className="font-medium text-slate-200">{Math.round(meal.nutrition.phosphorus_mg || 0)}mg</p>
+                                      </div>
+                                      <div className="bg-slate-700/30 p-2 rounded border border-slate-600/30">
+                                        <p className="text-xs text-slate-400">Fiber</p>
+                                        <p className="font-medium text-slate-200">{Math.round(meal.nutrition.fiber_g || 0)}g</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Ingredients list */}
+                                  {meal.ingredients && meal.ingredients.length > 0 && (
+                                    <div>
+                                      <h5 className="font-semibold text-slate-200 mb-2 text-sm">Main Ingredients</h5>
+                                      <ul className="space-y-1">
+                                        {meal.ingredients.map((ing, idx) => (
+                                          <li key={idx} className="flex justify-between text-xs items-center bg-slate-800 p-2 rounded border border-slate-700">
+                                            <span className="text-slate-300">{ing.name}</span>
+                                            <span className="text-slate-400 font-medium">{ing.quantity} {ing.unit}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
 
-          <div className="card p-4 mb-8">
-            <p className="text-sm font-medium text-gray-700">Meal Completion</p>
-            <p className="text-lg font-bold text-green-700 mt-1">{completedMealsCount} / {totalMealsCount} meals completed</p>
-          </div>
-
-          {/* Validation Status */}
-          <div className={`card p-4 mb-8 border-l-4 ${
-            currentDay.validation_status === 'pass'
-              ? 'border-l-green-500 bg-green-50'
-              : currentDay.validation_status === 'warn'
-                ? 'border-l-yellow-500 bg-yellow-50'
-                : 'border-l-red-500 bg-red-50'
-          }`}>
-            <div className="flex items-start gap-3">
-              <div className={getStatusColor(currentDay.validation_status)}>
-                {getStatusIcon(currentDay.validation_status)}
-              </div>
-              <div>
-                <p className="font-semibold">
-                  {currentDay.validation_status === 'pass'
-                    ? '✓ All Nutrients Within Target'
-                    : currentDay.validation_status === 'warn'
-                      ? '⚠ Minor Nutrient Variations'
-                      : '✗ Significant Nutrient Deviations'}
-                </p>
-                <p className="text-sm text-gray-600 mt-1">Cost: ₹{currentDay.total_cost_inr}</p>
-              </div>
+            {/* Action Buttons */}
+            <div className="flex gap-4 justify-center pt-8">
+              <button onClick={() => router.push('/grocery')} className="btn btn-primary gap-2">
+                View Grocery List <ChevronRight className="w-4 h-4" />
+              </button>
+              <button onClick={() => router.push('/dashboard')} className="btn btn-outline gap-2">
+                Back to Dashboard <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
-
-          {/* Meals List */}
-          <div className="space-y-4">
-            {(currentDay.meals || []).map((meal, mealIndex) => (
-              <MealCard
-                key={mealIndex}
-                meal={meal}
-                isConsumed={consumedMealKeySet.has(`${boundedDayIndex}-${mealIndex}`)}
-                isExpanded={expandedMealId === `${boundedDayIndex}-${mealIndex}`}
-                onToggleExpand={() =>
-                  setExpandedMealId(
-                    expandedMealId === `${boundedDayIndex}-${mealIndex}` ? null : `${boundedDayIndex}-${mealIndex}`
-                  )
-                }
-                onSwap={() => setSwappingMealId(`${boundedDayIndex}-${mealIndex}`)}
-                onToggleConsumed={(consumed) =>
-                  dispatch({
-                    type: 'SET_MEAL_CONSUMED',
-                    payload: { dayIndex: boundedDayIndex, mealIndex, consumed },
-                  })
-                }
-              />
-            ))}
-          </div>
-        </div>
+        </main>
       </div>
-
-      {activeSwap && (
-        <MealSwapModal
-          meal={activeSwap.meal}
-          userProfile={state.userProfile}
-          isOpen={true}
-          onClose={() => setSwappingMealId(null)}
-          onConfirm={(option) => {
-            void applySwapWithRebalance(activeSwap.dayIndex, activeSwap.mealIndex, option)
-          }}
-        />
-      )}
     </div>
   )
 }
+
+

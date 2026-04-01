@@ -13,9 +13,9 @@ html {
 }
 
 body {
-  background-color: #f9fafb;
-  font-family: 'Inter', sans-serif;
-  color: #1f2937;
+  background-color: #020617;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #e2e8f0;
 }
 
 /* Scrollbar */
@@ -24,66 +24,78 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #0f172a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #334155;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #475569;
 }
 
 /* Custom components */
 @layer components {
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-gray-100;
+    @apply bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/80 transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-2xl hover:shadow-emerald-500/20 hover:border-emerald-500/40 hover:-translate-y-0.5 cursor-pointer;
   }
 
   .badge {
-    @apply inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-medium;
+    @apply inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-semibold;
   }
 
   .badge-success {
-    @apply bg-green-100 text-green-800;
+    @apply bg-emerald-500/30 text-emerald-200 border border-emerald-500/50;
   }
 
   .badge-warning {
-    @apply bg-yellow-100 text-yellow-800;
+    @apply bg-amber-500/30 text-amber-200 border border-amber-500/50;
   }
 
   .badge-danger {
-    @apply bg-red-100 text-red-800;
+    @apply bg-red-500/30 text-red-200 border border-red-500/50;
   }
 
   .badge-primary {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-blue-500/30 text-blue-200 border border-blue-500/50;
+  }
+
+  .badge-info {
+    @apply bg-cyan-500/30 text-cyan-200 border border-cyan-500/50;
   }
 
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer inline-flex items-center justify-center gap-2;
+    @apply px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer inline-flex items-center justify-center gap-2 text-sm;
   }
 
   .btn-primary {
-    @apply bg-green-600 text-white hover:bg-green-700 active:bg-green-800;
+    @apply bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500 active:from-emerald-700 active:to-teal-700 shadow-lg shadow-emerald-500/20;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-900 hover:bg-gray-300 active:bg-gray-400;
+    @apply bg-slate-700 text-slate-200 hover:bg-slate-600 active:bg-slate-800 border border-slate-600;
   }
 
   .btn-outline {
-    @apply border-2 border-gray-300 text-gray-700 hover:bg-gray-50;
+    @apply border-2 border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-slate-500;
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700;
+    @apply bg-red-600/80 text-white hover:bg-red-500 active:bg-red-700 border border-red-500;
   }
 
   .input {
-    @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all;
+    @apply w-full px-4 py-2.5 rounded-lg border border-slate-600 bg-slate-800/80 text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 transition-all placeholder-slate-500;
+  }
+
+  .input-lg {
+    @apply input text-base py-3;
   }
 
   .radio-group {
@@ -91,12 +103,96 @@ body {
   }
 
   .radio-pill {
-    @apply px-4 py-2 rounded-full border-2 border-gray-300 cursor-pointer transition-all hover:border-green-500 has-[:checked]:bg-green-100 has-[:checked]:border-green-500;
+    @apply px-4 py-2 rounded-lg border-2 border-slate-600 bg-slate-800/50 text-slate-300 cursor-pointer transition-all hover:border-emerald-400 hover:bg-slate-700 has-[:checked]:bg-emerald-500/20 has-[:checked]:text-emerald-300 has-[:checked]:border-emerald-500;
+  }
+
+  .checkbox-pill {
+    @apply px-4 py-2 rounded-lg border-2 border-slate-600 bg-slate-800/50 text-slate-300 cursor-pointer transition-all hover:border-emerald-400 hover:bg-slate-700 has-[:checked]:bg-emerald-500/20 has-[:checked]:text-emerald-300 has-[:checked]:border-emerald-500;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-white mb-1;
+  }
+
+  .section-subtitle {
+    @apply text-sm text-slate-400 mb-6;
+  }
+
+  .form-group {
+    @apply mb-6;
+  }
+
+  .form-label {
+    @apply block text-sm font-semibold text-slate-300 mb-2;
+  }
+
+  .form-label-required::after {
+    @apply content-['*'] ml-1 text-red-400;
+  }
+
+  .divider {
+    @apply border-t border-slate-700/60;
   }
 }
 
 /* Animations */
 @keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Shadows */
+.shadow-sm-custom {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md-custom {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideInUp {
   from {
     opacity: 0;
     transform: translateY(10px);
