@@ -102,13 +102,13 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900">
       {/* Header */}
-      <header className="bg-slate-900/50 border-b border-slate-700/50 backdrop-blur sticky top-0 z-40">
+      <header className="bg-white/90 border-b border-gray-200 backdrop-blur sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <Leaf className="w-6 h-6 text-white" />
+              <Leaf className="w-6 h-6 text-gray-900" />
             </div>
-            <h1 className="text-2xl font-bold text-white">NutriPlan AI</h1>
+            <h1 className="text-2xl font-bold text-gray-900">NutriPlan AI</h1>
           </div>
         </div>
       </header>
@@ -126,8 +126,8 @@ export default function OnboardingPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-3xl font-bold text-white">{stepTitles[currentStep]}</h2>
-              <p className="text-slate-300 mt-2">{stepDescriptions[currentStep]}</p>
+              <h2 className="text-3xl font-bold text-gray-900">{stepTitles[currentStep]}</h2>
+              <p className="text-gray-700 mt-2">{stepDescriptions[currentStep]}</p>
             </div>
             <div className="text-right">
               <div className="text-sm font-semibold text-emerald-400">
@@ -140,7 +140,7 @@ export default function OnboardingPage() {
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-slate-700/50 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-transparent rounded-full h-3 overflow-hidden">
             <div
               className="bg-gradient-to-r from-emerald-500 to-teal-600 h-3 rounded-full transition-all duration-500 shadow-lg shadow-emerald-500/50"
               style={{ width: `${((currentStep + 1) / 3) * 100}%` }}
@@ -165,7 +165,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Form Card */}
-        <div className="card p-8 md:p-12 mb-8 bg-slate-800/80 border border-slate-700/80">
+        <div className="card p-8 md:p-12 mb-8 bg-white border border-gray-200">
           {currentStep === 0 && (
             <Step1Form
               profile={state.userProfile}
@@ -192,7 +192,7 @@ export default function OnboardingPage() {
                 <div className="mt-8 p-6 bg-gradient-to-r from-blue-600/60 to-cyan-600/60 border border-blue-500/80 rounded-xl shadow-lg shadow-blue-500/20">
                   <div className="flex items-start gap-4">
                     <div className="p-3 bg-blue-500/70 rounded-lg">
-                      <Upload className="w-6 h-6 text-white" />
+                      <Upload className="w-6 h-6 text-gray-900" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-blue-50 mb-1">Upload Medical Report (Optional)</h3>
@@ -263,7 +263,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Help Text */}
-        <p className="text-center text-sm text-slate-400 mt-8">
+        <p className="text-center text-sm text-gray-600 mt-8">
           ✓ Your data is secure and used only for your meal plan • No account needed • Takes ~5 minutes
         </p>
       </main>

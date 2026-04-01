@@ -16,8 +16,8 @@ export default function DashboardPage() {
 
   if (!state.weekPlan) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <p className="text-slate-400">No meal plan found. Please generate a plan first.</p>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <p className="text-gray-600">No meal plan found. Please generate a plan first.</p>
       </div>
     )
   }
@@ -131,17 +131,17 @@ export default function DashboardPage() {
       {/* Main Content */}
       <div className="ml-64">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-slate-900/50 border-b border-slate-700/50 backdrop-blur px-8 py-4 flex items-center justify-between">
+        <header className="sticky top-0 z-30 bg-white/90 border-b border-gray-200 backdrop-blur px-8 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-            <p className="text-sm text-slate-400 mt-1">Welcome back, {profile.fullName}!</p>
+            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-sm text-gray-600 mt-1">Welcome back, {profile.fullName}!</p>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-              <Bell className="w-5 h-5 text-slate-400" />
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <Bell className="w-5 h-5 text-gray-600" />
             </button>
-            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-              <Settings className="w-5 h-5 text-slate-400" />
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <Settings className="w-5 h-5 text-gray-600" />
             </button>
           </div>
         </header>
@@ -171,7 +171,7 @@ export default function DashboardPage() {
 
             {/* Quick Actions */}
             <div>
-              <h3 className="text-xl font-bold mb-6 text-white">Quick Actions</h3>
+              <h3 className="text-xl font-bold mb-6 text-gray-900">Quick Actions</h3>
               <QuickActions
                 onLogMeal={handleLogMeal}
                 onAddActivity={() => alert('Coming soon!')}
@@ -184,10 +184,10 @@ export default function DashboardPage() {
 
             {/* Stats Footer */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 mb-6">
-              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+              <div className="card p-6 bg-white border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-400 text-sm">Weekly Compliance</p>
+                    <p className="text-gray-600 text-sm">Weekly Compliance</p>
                     <p className="text-3xl font-bold text-blue-400 mt-2">{Math.round(weeklyCompletion)}%</p>
                   </div>
                   <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-2xl">
@@ -196,10 +196,10 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
+              <div className="card p-6 bg-white border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-400 text-sm">Streak Days</p>
+                    <p className="text-gray-600 text-sm">Streak Days</p>
                     <p className="text-3xl font-bold text-orange-400 mt-2">{streakDays} / 7</p>
                   </div>
                   <div className="w-16 h-16 rounded-full bg-orange-500/20 flex items-center justify-center text-2xl">

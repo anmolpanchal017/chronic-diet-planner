@@ -128,20 +128,20 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
 
       {/* Modal */}
       <div className="relative min-h-screen flex items-center justify-center p-4">
-        <div className="relative bg-slate-800 rounded-2xl shadow-2xl shadow-slate-950/80 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-700/60">
+        <div className="relative bg-white rounded-2xl shadow-2xl shadow-slate-950/80 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-200">
           {/* Header */}
-          <div className="sticky top-0 bg-gradient-to-r from-slate-900 to-slate-800 p-6 border-b border-slate-700/60 flex items-center justify-between">
+          <div className="sticky top-0 bg-gradient-to-r from-slate-900 to-slate-800 p-6 border-b border-gray-200 flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-white">Swap This Meal</h2>
-              <p className="text-sm text-slate-300 mt-1">
+              <h2 className="text-2xl font-bold text-gray-900">Swap This Meal</h2>
+              <p className="text-sm text-gray-700 mt-1">
                 Choose one of the best alternatives for {meal.dish_name}.
               </p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-700/60 rounded-lg transition"
+              className="p-2 hover:bg-gray-200/60 rounded-lg transition"
             >
-              <X className="w-6 h-6 text-slate-300" />
+              <X className="w-6 h-6 text-gray-700" />
             </button>
           </div>
 
@@ -160,9 +160,9 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                   />
                 </div>
                 <div className="flex-1">
-                  <p className="font-bold text-lg text-white">{meal.dish_name}</p>
+                  <p className="font-bold text-lg text-gray-900">{meal.dish_name}</p>
                   <span className="badge bg-blue-500/40 text-blue-100 border border-blue-500/60 text-xs mt-1 px-2 py-1">{meal.meal_type}</span>
-                  <div className="flex gap-3 mt-3 text-xs text-slate-300">
+                  <div className="flex gap-3 mt-3 text-xs text-gray-700">
                     <span>{Math.round(meal.nutrition.calories)} cal</span>
                     <span>{Math.round(meal.nutrition.protein_g)}g protein</span>
                     <span>₹{meal.cost_inr}</span>
@@ -173,7 +173,7 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
 
             {/* Swap Options */}
             <div>
-              <p className="text-sm font-bold mb-4 text-white">Available Swaps</p>
+              <p className="text-sm font-bold mb-4 text-gray-900">Available Swaps</p>
               <p className="text-sm text-emerald-200 bg-emerald-500/20 border border-emerald-500/50 rounded-lg p-3 mb-4">
                 These recommendations are selected for your health goals. Please avoid changing them unless necessary.
               </p>
@@ -186,7 +186,7 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                       className={`p-4 rounded-lg border-2 cursor-pointer transition ${
                         selectedSwap?.dish_id === option.dish_id
                           ? 'border-emerald-500/60 bg-emerald-500/20'
-                          : 'border-slate-700/60 hover:border-slate-600/60 hover:bg-slate-700/30'
+                          : 'border-gray-200 hover:border-gray-300/60 hover:bg-gray-200/30'
                       }`}
                     >
                       <div className="flex items-start gap-4">
@@ -200,20 +200,20 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <p className="font-bold text-white">{option.dish_name}</p>
+                            <p className="font-bold text-gray-900">{option.dish_name}</p>
                             {option.is_highly_recommended && (
                               <span className="badge bg-emerald-500/40 text-emerald-100 border border-emerald-500/60 text-xs px-2 py-1">⚡ Recommended</span>
                             )}
                           </div>
-                          <p className="text-sm text-slate-300 mt-1">
+                          <p className="text-sm text-gray-700 mt-1">
                             {option.why_recommended || option.reason || 'Nutritious choice'}
                           </p>
 
                           {/* Nutrition comparison */}
                           <div className="grid grid-cols-4 gap-2 mt-3 text-xs">
                             <div>
-                              <span className="text-slate-400">Calories</span>
-                              <p className="font-bold text-white">{Math.round(option.nutrition.calories)}</p>
+                              <span className="text-gray-600">Calories</span>
+                              <p className="font-bold text-gray-900">{Math.round(option.nutrition.calories)}</p>
                               <span className={`text-xs ${
                                 option.nutrition.calories < meal.nutrition.calories
                                   ? 'text-emerald-400'
@@ -223,8 +223,8 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                               </span>
                             </div>
                             <div>
-                              <span className="text-slate-400">Protein</span>
-                              <p className="font-bold text-white">{Math.round(option.nutrition.protein_g)}g</p>
+                              <span className="text-gray-600">Protein</span>
+                              <p className="font-bold text-gray-900">{Math.round(option.nutrition.protein_g)}g</p>
                               <span className={`text-xs ${
                                 option.nutrition.protein_g > meal.nutrition.protein_g
                                   ? 'text-emerald-400'
@@ -234,8 +234,8 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                               </span>
                             </div>
                             <div>
-                              <span className="text-slate-400">Fiber</span>
-                              <p className="font-bold text-white">{Math.round(option.nutrition.fiber_g)}g</p>
+                              <span className="text-gray-600">Fiber</span>
+                              <p className="font-bold text-gray-900">{Math.round(option.nutrition.fiber_g)}g</p>
                               <span className={`text-xs ${
                                 option.nutrition.fiber_g > meal.nutrition.fiber_g
                                   ? 'text-emerald-400'
@@ -245,8 +245,8 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                               </span>
                             </div>
                             <div>
-                              <span className="text-slate-400">Cost</span>
-                              <p className="font-bold text-white">₹{option.cost_inr}</p>
+                              <span className="text-gray-600">Cost</span>
+                              <p className="font-bold text-gray-900">₹{option.cost_inr}</p>
                               <span className={`text-xs ${
                                 option.cost_inr < meal.cost_inr
                                   ? 'text-emerald-400'
@@ -261,7 +261,7 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                     </div>
                   ))
                 ) : (
-                  <p className="text-slate-400 text-center py-8">
+                  <p className="text-gray-600 text-center py-8">
                     No highly recommended alternatives are available for this meal right now.
                   </p>
                 )}
@@ -269,9 +269,9 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
             </div>
 
             {/* Custom Dish Selection */}
-            <div className="border border-slate-700/60 rounded-lg p-4 bg-slate-900/50">
-              <p className="text-sm font-bold mb-3 text-white">Choose Your Favorite Dish</p>
-              <p className="text-xs text-slate-400 mb-3">
+            <div className="border border-gray-200 rounded-lg p-4 bg-white/90">
+              <p className="text-sm font-bold mb-3 text-gray-900">Choose Your Favorite Dish</p>
+              <p className="text-xs text-gray-600 mb-3">
                 You can pick your own dish, but we will check if it is safe for your health profile before allowing swap.
               </p>
 
@@ -283,14 +283,14 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                   setCustomError(null)
                 }}
                 placeholder="Search dish name"
-                className="w-full border border-slate-600/60 rounded-md px-3 py-2 text-sm mb-3 bg-slate-800 text-slate-200 placeholder-slate-500"
+                className="w-full border border-gray-300/60 rounded-md px-3 py-2 text-sm mb-3 bg-white text-gray-800 placeholder-slate-500"
               />
 
-              <div className="max-h-40 overflow-auto border border-slate-600/60 rounded-md bg-slate-900">
+              <div className="max-h-40 overflow-auto border border-gray-300/60 rounded-md bg-white">
                 {isLoadingDishes ? (
-                  <p className="text-sm text-slate-400 p-3">Loading dishes...</p>
+                  <p className="text-sm text-gray-600 p-3">Loading dishes...</p>
                 ) : dishOptions.length === 0 ? (
-                  <p className="text-sm text-slate-400 p-3">No dishes found for this meal type.</p>
+                  <p className="text-sm text-gray-600 p-3">No dishes found for this meal type.</p>
                 ) : (
                   dishOptions.map((dish) => (
                     <button
@@ -301,12 +301,12 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
                         setCustomCheck(null)
                         setCustomError(null)
                       }}
-                      className={`w-full text-left px-3 py-2 text-sm border-b border-slate-700/40 last:border-b-0 ${
-                        selectedDishId === dish.id ? 'bg-emerald-500/30 text-emerald-100' : 'hover:bg-slate-800/50 text-slate-300'
+                      className={`w-full text-left px-3 py-2 text-sm border-b border-gray-200/40 last:border-b-0 ${
+                        selectedDishId === dish.id ? 'bg-emerald-500/30 text-emerald-100' : 'hover:bg-gray-100/50 text-gray-700'
                       }`}
                     >
                       <span className="font-medium">{dish.name}</span>
-                      <span className="text-xs text-slate-500 ml-2">₹{dish.cost_inr} • {dish.prep_time_min} min</span>
+                      <span className="text-xs text-gray-500 ml-2">₹{dish.cost_inr} • {dish.prep_time_min} min</span>
                     </button>
                   ))
                 )}
@@ -358,10 +358,10 @@ export default function MealSwapModal({ meal, userProfile, isOpen, onClose, onCo
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 bg-slate-900/90 border-t border-slate-700/60 p-6 flex gap-3 backdrop-blur">
+          <div className="sticky bottom-0 bg-white/90 border-t border-gray-200 p-6 flex gap-3 backdrop-blur">
             <button
               onClick={onClose}
-              className="border border-slate-600/60 hover:border-slate-500/60 text-slate-300 hover:text-slate-200 px-4 py-2 rounded-lg font-medium flex-1 transition-all duration-200"
+              className="border border-gray-300/60 hover:border-gray-400/60 text-gray-700 hover:text-gray-800 px-4 py-2 rounded-lg font-medium flex-1 transition-all duration-200"
             >
               Cancel
             </button>

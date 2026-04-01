@@ -23,7 +23,7 @@ export default function GroceryPage() {
   if (!weekPlan) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900 flex items-center justify-center">
-        <p className="text-slate-400">No meal plan found. Please generate a plan first.</p>
+        <p className="text-gray-600">No meal plan found. Please generate a plan first.</p>
       </div>
     )
   }
@@ -133,24 +133,24 @@ export default function GroceryPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 text-white">Grocery List</h1>
-          <p className="text-slate-400">Shopping list for your 7-day plan</p>
+          <h1 className="text-3xl font-bold mb-2 text-gray-900">Grocery List</h1>
+          <p className="text-gray-600">Shopping list for your 7-day plan</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Budget Summary */}
           <div className="md:col-span-1">
-            <div className="card p-6 mb-6 bg-slate-800/80 border border-slate-700/80">
-              <h3 className="text-lg font-bold text-white mb-4">Budget Summary</h3>
+            <div className="card p-6 mb-6 bg-white border border-gray-200">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Budget Summary</h3>
 
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Weekly Budget:</span>
-                  <span className="font-bold text-lg text-white">₹{Math.round(weeklyBudget)}</span>
+                  <span className="text-gray-600">Weekly Budget:</span>
+                  <span className="font-bold text-lg text-gray-900">₹{Math.round(weeklyBudget)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Groceries:</span>
-                  <span className="font-bold text-lg text-white">₹{Math.round(totalCost)}</span>
+                  <span className="text-gray-600">Groceries:</span>
+                  <span className="font-bold text-lg text-gray-900">₹{Math.round(totalCost)}</span>
                 </div>
                 <div className={`flex justify-between items-center p-3 rounded-lg ${
                   budgetRemaining >= 0
@@ -194,11 +194,11 @@ export default function GroceryPage() {
             </div>
 
             {/* Category Summary */}
-            <div className="card p-6 bg-slate-800/80 border border-slate-700/80 mt-6">
-              <h3 className="text-lg font-bold text-white mb-4">By Category</h3>
+            <div className="card p-6 bg-white border border-gray-200 mt-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">By Category</h3>
               <div className="space-y-2">
                 {Object.entries(grouped).map(([category, items]) => (
-                  <div key={category} className="flex justify-between items-center p-2 bg-slate-700/50 rounded text-slate-300">
+                  <div key={category} className="flex justify-between items-center p-2 bg-transparent rounded text-gray-700">
                     <span className="text-sm">{category}</span>
                     <span className="text-sm font-bold text-emerald-400">
                       ₹{Math.round(items.reduce((sum, item) => sum + item.estimatedCost, 0))}
@@ -212,13 +212,13 @@ export default function GroceryPage() {
           {/* Grocery List */}
           <div className="md:col-span-2">
             {Object.entries(grouped).map(([category, items]) => (
-              <div key={category} className="card p-6 mb-6 bg-slate-800/80 border border-slate-700/80">
+              <div key={category} className="card p-6 mb-6 bg-white border border-gray-200">
                 <h3 className="text-lg font-bold mb-4 text-emerald-500">{category}</h3>
                 <div className="space-y-3">
                   {items.map(item => (
                     <div
                       key={item.id}
-                      className="flex items-start gap-4 p-4 bg-slate-700/30 rounded-lg hover:bg-slate-700/60 transition"
+                      className="flex items-start gap-4 p-4 bg-slate-700/30 rounded-lg hover:bg-gray-200/60 transition"
                     >
                       <button
                         onClick={() => handleToggle(item.id)}
@@ -227,18 +227,18 @@ export default function GroceryPage() {
                         {checkedItems.has(item.id) ? (
                           <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                         ) : (
-                          <div className="w-5 h-5 border-2 border-slate-500 rounded-full" />
+                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full" />
                         )}
                       </button>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2">
-                          <p className={`font-semibold ${checkedItems.has(item.id) ? 'line-through text-slate-500' : 'text-slate-200'}`}>
+                          <p className={`font-semibold ${checkedItems.has(item.id) ? 'line-through text-gray-500' : 'text-gray-800'}`}>
                             {item.name}
                           </p>
-                          <p className="text-xs text-slate-500">({item.nameHindi})</p>
+                          <p className="text-xs text-gray-500">({item.nameHindi})</p>
                         </div>
-                        <p className="text-sm text-slate-400 mt-1">{item.quantity}</p>
+                        <p className="text-sm text-gray-600 mt-1">{item.quantity}</p>
                       </div>
 
                       <div className="text-right flex-shrink-0">

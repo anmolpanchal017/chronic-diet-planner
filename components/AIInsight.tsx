@@ -17,7 +17,7 @@ export default function AIInsight({
   icon,
 }: AIInsightProps) {
   return (
-    <div className="card p-6 bg-slate-800/80 border-l-4 border-l-emerald-500 shadow-emerald-500/10">
+    <div className="card p-6 bg-white border-l-4 border-l-emerald-500 shadow-emerald-500/10">
       <div className="flex gap-4">
         <div className="flex-shrink-0">
           {icon ? (
@@ -30,8 +30,8 @@ export default function AIInsight({
         </div>
 
         <div className="flex-1">
-          <h4 className="font-bold text-white mb-1">{title}</h4>
-          <p className="text-sm text-slate-300 mb-3">{description}</p>
+          <h4 className="font-bold text-gray-900 mb-1">{title}</h4>
+          <p className="text-sm text-gray-700 mb-3">{description}</p>
           {recommendation && (
             <p className="text-xs font-medium text-emerald-300 bg-emerald-900/50 px-2 py-1 rounded inline-block border border-emerald-500/30">
               💡 {recommendation}

@@ -17,7 +17,7 @@ export default function VitalityScore({ score = 84, maxScore = 100, trend = 'up'
   return (
     <div className="card p-8 bg-gradient-to-br from-slate-900 to-slate-800 border-0 shadow-xl">
       <div className="flex flex-col items-center justify-center">
-        <p className="text-slate-300 text-sm font-medium mb-6">Your metabolic efficiency today</p>
+        <p className="text-gray-700 text-sm font-medium mb-6">Your metabolic efficiency today</p>
         
         <div className="relative w-64 h-64 mb-8">
           {/* Circle Background */}
@@ -28,7 +28,7 @@ export default function VitalityScore({ score = 84, maxScore = 100, trend = 'up'
               cy="100"
               r="90"
               fill="none"
-              stroke="#374151"
+              stroke="#e5e7eb"
               strokeWidth="8"
             />
             {/* Progress circle */}
@@ -48,13 +48,13 @@ export default function VitalityScore({ score = 84, maxScore = 100, trend = 'up'
 
           {/* Score Text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-5xl font-bold text-white">{Math.round(score)}</div>
-            <div className="text-xl text-slate-400">/ {maxScore}</div>
+            <div className="text-5xl font-bold text-gray-900">{Math.round(score)}</div>
+            <div className="text-xl text-gray-600">/ {maxScore}</div>
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-2">Vitality Score</h2>
-        <p className="text-slate-400 text-center text-sm">Track your overall metabolic health & nutritional compliance</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Vitality Score</h2>
+        <p className="text-gray-600 text-center text-sm">Track your overall metabolic health & nutritional compliance</p>
       </div>
     </div>
   )

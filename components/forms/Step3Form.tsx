@@ -10,7 +10,7 @@ interface Step3FormProps {
 export default function Step3Form({ profile, onUpdate }: Step3FormProps) {
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-white">Survey Complete</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Survey Complete</h2>
       
       <div className="p-6 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
         <p className="text-emerald-200">

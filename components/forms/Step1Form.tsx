@@ -64,11 +64,11 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-white">Personal & Medical Information</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Personal & Medical Information</h2>
 
       {/* Full Name */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">Full Name *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
         <input
           type="text"
           className="input"
@@ -80,7 +80,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Age */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">Age *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Age *</label>
         <input
           type="number"
           className="input"
@@ -94,7 +94,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Gender */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">Gender *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
         <div className="radio-group">
           {['Male', 'Female', 'Other'].map(gender => (
             <label key={gender} className="radio-pill flex items-center">
@@ -115,7 +115,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
       {/* Weight & Height with BMI */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Weight (kg) *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Weight (kg) *</label>
           <input
             type="number"
             className="input"
@@ -125,7 +125,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Height (cm) *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Height (cm) *</label>
           <input
             type="number"
             className="input"
@@ -156,7 +156,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
 
       {/* Conditions */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-3">Medical Conditions *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-3">Medical Conditions *</label>
         <div className="grid grid-cols-2 gap-3">
           {(Object.keys(CONDITION_MAP) as Condition[]).map(condition => (
             <label key={condition} className="radio-pill cursor-pointer flex items-center p-3">
@@ -180,7 +180,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
             <div key={condition}>
               <label className="text-sm font-medium text-amber-100/80">{CONDITION_MAP[condition]}</label>
               <select
-                className="input mt-1 bg-slate-800 text-white border-slate-600 focus:border-amber-500 focus:ring-amber-500/30"
+                className="input mt-1 bg-white text-gray-900 border-gray-300 focus:border-amber-500 focus:ring-amber-500/30"
                 value={profile.conditionSeverities?.[condition] || ''}
                 onChange={e =>
                   onUpdate({
@@ -212,7 +212,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
             <input
               type="number"
               step="0.1"
-              className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
+              className="input mt-1 bg-white border-gray-300 focus:border-emerald-500"
               value={profile.labValues?.hbA1c || ''}
               onChange={e =>
                 onUpdate({
@@ -230,7 +230,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
               <label className="text-sm text-emerald-100/80">BP Systolic (mmHg)</label>
               <input
                 type="number"
-                className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
+                className="input mt-1 bg-white border-gray-300 focus:border-emerald-500"
                 value={profile.labValues?.bpSystolic || ''}
                 onChange={e =>
                   onUpdate({
@@ -247,7 +247,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
               <label className="text-sm text-emerald-100/80">BP Diastolic (mmHg)</label>
               <input
                 type="number"
-                className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
+                className="input mt-1 bg-white border-gray-300 focus:border-emerald-500"
                 value={profile.labValues?.bpDiastolic || ''}
                 onChange={e =>
                   onUpdate({
@@ -265,7 +265,7 @@ export default function Step1Form({ profile, onUpdate }: Step1FormProps) {
             <label className="text-sm text-emerald-100/80">eGFR (mL/min)</label>
             <input
               type="number"
-              className="input mt-1 bg-slate-800 border-slate-600 focus:border-emerald-500"
+              className="input mt-1 bg-white border-gray-300 focus:border-emerald-500"
               value={profile.labValues?.eGFR || ''}
               onChange={e =>
                 onUpdate({

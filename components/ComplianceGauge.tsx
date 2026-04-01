@@ -27,7 +27,7 @@ export function ComplianceGauge({ title, metrics, condition }: ComplianceGaugePr
       case 'danger':
         return 'text-red-400'
       default:
-        return 'text-slate-400'
+        return 'text-gray-600'
     }
   }
 
@@ -53,13 +53,13 @@ export function ComplianceGauge({ title, metrics, condition }: ComplianceGaugePr
       case 'danger':
         return 'border-red-500/50'
       default:
-        return 'border-slate-600/50'
+        return 'border-gray-300/50'
     }
   }
 
   return (
-    <div className="card p-6 bg-slate-800/80 border border-slate-700/80">
-      <h3 className="text-lg font-bold mb-4 text-white">{condition}</h3>
+    <div className="card p-6 bg-white border border-gray-200">
+      <h3 className="text-lg font-bold mb-4 text-gray-900">{condition}</h3>
       <div className="space-y-4">
         {metrics.map((metric, idx) => (
           <div
@@ -71,7 +71,7 @@ export function ComplianceGauge({ title, metrics, condition }: ComplianceGaugePr
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
                 <div className={`w-1.5 h-1.5 rounded-full ${getColorClass(metric.status)}`} />
-                <span className="font-semibold text-sm text-slate-200">{metric.label}</span>
+                <span className="font-semibold text-sm text-gray-800">{metric.label}</span>
               </div>
               <span className={`font-bold text-lg ${getColorClass(metric.status)}`}>
                 {metric.value}{metric.unit}
@@ -79,7 +79,7 @@ export function ComplianceGauge({ title, metrics, condition }: ComplianceGaugePr
             </div>
 
             {/* Progress bar */}
-            <div className="w-full bg-slate-700/50 rounded-full h-2">
+            <div className="w-full bg-transparent rounded-full h-2">
               <div
                 className={`h-2 rounded-full transition-all ${
                   metric.status === 'good'
@@ -92,7 +92,7 @@ export function ComplianceGauge({ title, metrics, condition }: ComplianceGaugePr
               />
             </div>
 
-            <div className="text-xs text-slate-400 mt-2">
+            <div className="text-xs text-gray-600 mt-2">
               Target: {metric.target}{metric.unit}
             </div>
           </div>
@@ -104,7 +104,7 @@ export function ComplianceGauge({ title, metrics, condition }: ComplianceGaugePr
 
 export function ComplianceOverview({ conditions }: { conditions: string[] | undefined }) {
   if (!conditions || conditions.length === 0) {
-    return <div className="card p-6 text-center text-slate-400 bg-slate-800/80 border border-slate-700/80">No conditions found</div>
+    return <div className="card p-6 text-center text-gray-600 bg-white border border-gray-200">No conditions found</div>
   }
 
   // Sample compliance data - in real app this would come from plan validation

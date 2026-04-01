@@ -30,7 +30,7 @@ function CircularGauge({ metric }: { metric: GaugeMetric }) {
             cy="50"
             r="45"
             fill="none"
-            stroke="#1e293b"
+            stroke="#e2e8f0"
             strokeWidth="4"
           />
           {/* Progress circle */}
@@ -50,13 +50,13 @@ function CircularGauge({ metric }: { metric: GaugeMetric }) {
 
         {/* Center Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-xl font-bold text-white">{Math.round(metric.value)}{metric.unit}</div>
-          <div className="text-xs text-slate-400">{metric.label}</div>
+          <div className="text-xl font-bold text-gray-900">{Math.round(metric.value)}{metric.unit}</div>
+          <div className="text-xs text-gray-600">{metric.label}</div>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-slate-800 rounded-full h-2 mb-2 border border-slate-700/50">
+      <div className="w-full bg-white rounded-full h-2 mb-2 border border-gray-200">
         <div
           className="h-full rounded-full transition-all duration-1000"
           style={{
@@ -65,16 +65,16 @@ function CircularGauge({ metric }: { metric: GaugeMetric }) {
           }}
         />
       </div>
-      <p className="text-xs text-slate-400">{Math.round(percentage)}% of target</p>
+      <p className="text-xs text-gray-600">{Math.round(percentage)}% of target</p>
     </div>
   )
 }
 
 export default function DailyProgress({ metrics }: DailyProgressProps) {
   return (
-    <div className="card p-8 bg-slate-800/80 border border-slate-700/80">
-      <h3 className="text-2xl font-bold mb-2 text-white">Daily Progress</h3>
-      <p className="text-slate-400 mb-8">Track your nutrition metrics for today</p>
+    <div className="card p-8 bg-white border border-gray-200">
+      <h3 className="text-2xl font-bold mb-2 text-gray-900">Daily Progress</h3>
+      <p className="text-gray-600 mb-8">Track your nutrition metrics for today</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {metrics.map((metric, idx) => (

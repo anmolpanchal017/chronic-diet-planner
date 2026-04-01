@@ -13,7 +13,7 @@ interface ActionCardProps {
 const colorClasses = {
   green: 'bg-emerald-500 hover:bg-emerald-600',
   blue: 'bg-blue-500 hover:bg-blue-600',
-  gray: 'bg-slate-500 hover:bg-slate-600',
+  gray: 'bg-gray-300 hover:bg-gray-200',
 }
 
 const bgColorClasses = {
@@ -26,15 +26,15 @@ export function ActionCard({ icon, title, description, color, onClick }: ActionC
   return (
     <button
       onClick={onClick}
-      className="card p-6 text-center hover:shadow-emerald-500/20 hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-1 group cursor-pointer bg-slate-800/80 border border-slate-700/80"
+      className="card p-6 text-center hover:shadow-emerald-500/20 hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-1 group cursor-pointer bg-white border border-gray-200"
     >
       <div className={`flex items-center justify-center w-16 h-16 rounded-full ${bgColorClasses[color]} mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-        <div className={`${colorClasses[color]} p-3 rounded-full text-white transition-all shadow-lg`}>
+        <div className={`${colorClasses[color]} p-3 rounded-full text-gray-900 transition-all shadow-lg`}>
           {icon}
         </div>
       </div>
-      <h4 className="font-bold text-white mb-2">{title}</h4>
-      <p className="text-sm text-slate-400">{description}</p>
+      <h4 className="font-bold text-gray-900 mb-2">{title}</h4>
+      <p className="text-sm text-gray-600">{description}</p>
     </button>
   )
 }

@@ -153,17 +153,17 @@ export default function HealthScoresPage() {
 
       <div className="ml-64">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-slate-900/50 border-b border-slate-700/50 backdrop-blur px-8 py-4 flex items-center justify-between">
+        <header className="sticky top-0 z-30 bg-white/90 border-b border-gray-200 backdrop-blur px-8 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">Health Scores</h1>
-            <p className="text-sm text-slate-400 mt-1">Track your chronic condition metrics</p>
+            <h1 className="text-2xl font-bold text-gray-900">Health Scores</h1>
+            <p className="text-sm text-gray-600 mt-1">Track your chronic condition metrics</p>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-              <Bell className="w-5 h-5 text-slate-400" />
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <Bell className="w-5 h-5 text-gray-600" />
             </button>
-            <button className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-              <Settings className="w-5 h-5 text-slate-400" />
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <Settings className="w-5 h-5 text-gray-600" />
             </button>
           </div>
         </header>

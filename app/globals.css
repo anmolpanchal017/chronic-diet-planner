@@ -13,9 +13,9 @@ html {
 }
 
 body {
-  background-color: #020617;
+  background-color: #f8fafc;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #e2e8f0;
+  color: #0f172a;
 }
 
 /* Scrollbar */
@@ -24,26 +24,26 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #94a3b8;
 }
 
 /* Custom components */
 @layer components {
   .card {
-    @apply bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/80 transition-all duration-300;
+    @apply bg-white rounded-xl shadow-md border border-slate-200 transition-all duration-300;
   }
 
   .card-hover {
-    @apply card hover:shadow-2xl hover:shadow-emerald-500/20 hover:border-emerald-500/40 hover:-translate-y-0.5 cursor-pointer;
+    @apply card hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/20 hover:-translate-y-0.5 cursor-pointer;
   }
 
   .badge {
@@ -51,23 +51,23 @@ body {
   }
 
   .badge-success {
-    @apply bg-emerald-500/30 text-emerald-200 border border-emerald-500/50;
+    @apply bg-emerald-100 text-emerald-800 border border-emerald-200;
   }
 
   .badge-warning {
-    @apply bg-amber-500/30 text-amber-200 border border-amber-500/50;
+    @apply bg-amber-100 text-amber-800 border border-amber-200;
   }
 
   .badge-danger {
-    @apply bg-red-500/30 text-red-200 border border-red-500/50;
+    @apply bg-red-100 text-red-800 border border-red-200;
   }
 
   .badge-primary {
-    @apply bg-blue-500/30 text-blue-200 border border-blue-500/50;
+    @apply bg-blue-100 text-blue-800 border border-blue-200;
   }
 
   .badge-info {
-    @apply bg-cyan-500/30 text-cyan-200 border border-cyan-500/50;
+    @apply bg-cyan-100 text-cyan-800 border border-cyan-200;
   }
 
   .btn {
@@ -75,23 +75,23 @@ body {
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500 active:from-emerald-700 active:to-teal-700 shadow-lg shadow-emerald-500/20;
+    @apply bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 active:from-emerald-700 active:to-teal-700 shadow-md shadow-emerald-500/20;
   }
 
   .btn-secondary {
-    @apply bg-slate-700 text-slate-200 hover:bg-slate-600 active:bg-slate-800 border border-slate-600;
+    @apply bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100 border border-slate-300 shadow-sm;
   }
 
   .btn-outline {
-    @apply border-2 border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-slate-500;
+    @apply border-2 border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 hover:text-slate-900;
   }
 
   .btn-danger {
-    @apply bg-red-600/80 text-white hover:bg-red-500 active:bg-red-700 border border-red-500;
+    @apply bg-red-500 text-white hover:bg-red-600 active:bg-red-700 shadow-md border border-red-600;
   }
 
   .input {
-    @apply w-full px-4 py-2.5 rounded-lg border border-slate-600 bg-slate-800/80 text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 transition-all placeholder-slate-500;
+    @apply w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder-slate-400 shadow-sm;
   }
 
   .input-lg {
@@ -103,23 +103,23 @@ body {
   }
 
   .radio-pill {
-    @apply px-4 py-2 rounded-lg border-2 border-slate-600 bg-slate-800/50 text-slate-300 cursor-pointer transition-all hover:border-emerald-400 hover:bg-slate-700 has-[:checked]:bg-emerald-500/20 has-[:checked]:text-emerald-300 has-[:checked]:border-emerald-500;
+    @apply px-4 py-2 rounded-lg border-2 border-slate-200 bg-white text-slate-600 cursor-pointer transition-all hover:border-emerald-300 hover:bg-emerald-50 has-[:checked]:bg-emerald-50 has-[:checked]:text-emerald-700 has-[:checked]:border-emerald-500;
   }
 
   .checkbox-pill {
-    @apply px-4 py-2 rounded-lg border-2 border-slate-600 bg-slate-800/50 text-slate-300 cursor-pointer transition-all hover:border-emerald-400 hover:bg-slate-700 has-[:checked]:bg-emerald-500/20 has-[:checked]:text-emerald-300 has-[:checked]:border-emerald-500;
+    @apply px-4 py-2 rounded-lg border-2 border-slate-200 bg-white text-slate-600 cursor-pointer transition-all hover:border-emerald-300 hover:bg-emerald-50 has-[:checked]:bg-emerald-50 has-[:checked]:text-emerald-700 has-[:checked]:border-emerald-500;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent;
   }
 
   .section-title {
-    @apply text-2xl font-bold text-white mb-1;
+    @apply text-2xl font-bold text-slate-900 mb-1;
   }
 
   .section-subtitle {
-    @apply text-sm text-slate-400 mb-6;
+    @apply text-sm text-slate-500 mb-6;
   }
 
   .form-group {
@@ -127,15 +127,15 @@ body {
   }
 
   .form-label {
-    @apply block text-sm font-semibold text-slate-300 mb-2;
+    @apply block text-sm font-semibold text-slate-700 mb-2;
   }
 
   .form-label-required::after {
-    @apply content-['*'] ml-1 text-red-400;
+    @apply content-['*'] ml-1 text-red-500;
   }
 
   .divider {
-    @apply border-t border-slate-700/60;
+    @apply border-t border-slate-200;
   }
 }
 

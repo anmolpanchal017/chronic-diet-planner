@@ -30,10 +30,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-900">
-          <div className="card p-8 max-w-md text-center bg-slate-800/90 border border-slate-700/80">
+          <div className="card p-8 max-w-md text-center bg-white/90 border border-gray-200">
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <h1 className="text-xl font-bold mb-2 text-white">Oops! Something went wrong</h1>
-            <p className="text-slate-300 mb-4 text-sm">
+            <h1 className="text-xl font-bold mb-2 text-gray-900">Oops! Something went wrong</h1>
+            <p className="text-gray-700 mb-4 text-sm">
               {this.state.error?.message || 'An unexpected error occurred. Please refresh the page.'}
             </p>
             <button

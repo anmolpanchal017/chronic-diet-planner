@@ -84,7 +84,7 @@ export default function PDFUploader({ onUpload, isProcessing, isSuccess }: PDFUp
     return (
       <div className="p-8 text-center">
         <Loader className="w-12 h-12 text-emerald-400 animate-spin mx-auto mb-4" />
-        <p className="text-slate-300">Processing your medical report...</p>
+        <p className="text-gray-700">Processing your medical report...</p>
       </div>
     )
   }
@@ -147,9 +147,9 @@ export default function PDFUploader({ onUpload, isProcessing, isSuccess }: PDFUp
 
           {/* Lab Values */}
           {(extractedData.labValues?.hbA1c || extractedData.labValues?.eGFR || extractedData.labValues?.potassium) && (
-            <div className="p-2 bg-slate-700/50 border border-slate-600/50 rounded">
-              <p className="font-medium text-slate-200 mb-1">Extracted Lab Values:</p>
-              <div className="text-xs text-slate-400 space-y-0.5">
+            <div className="p-2 bg-transparent border border-gray-300/50 rounded">
+              <p className="font-medium text-gray-800 mb-1">Extracted Lab Values:</p>
+              <div className="text-xs text-gray-600 space-y-0.5">
                 {extractedData.labValues.hbA1c && <p>✓ HbA1c: {extractedData.labValues.hbA1c}%</p>}
                 {extractedData.labValues.eGFR && <p>✓ eGFR: {extractedData.labValues.eGFR} mL/min</p>}
                 {extractedData.labValues.bpSystolic && extractedData.labValues.bpDiastolic && (
@@ -186,13 +186,13 @@ export default function PDFUploader({ onUpload, isProcessing, isSuccess }: PDFUp
         className={`p-8 border-2 border-dashed rounded-lg transition-all cursor-pointer ${
           isDragging
             ? 'border-emerald-500 bg-emerald-500/20'
-            : 'border-slate-600/60 hover:border-slate-500/60 bg-slate-800/40'
+            : 'border-gray-300/60 hover:border-gray-400/60 bg-white/40'
         }`}
       >
         <div className="text-center">
-          <Upload className={`w-12 h-12 mx-auto mb-3 ${isDragging ? 'text-emerald-400' : 'text-slate-400'}`} />
-          <p className="font-medium text-slate-200 mb-1">Drag your PDF here or click to upload</p>
-          <p className="text-xs text-slate-400">Blood test reports, HbA1c reports, and kidney function tests are all supported</p>
+          <Upload className={`w-12 h-12 mx-auto mb-3 ${isDragging ? 'text-emerald-400' : 'text-gray-600'}`} />
+          <p className="font-medium text-gray-800 mb-1">Drag your PDF here or click to upload</p>
+          <p className="text-xs text-gray-600">Blood test reports, HbA1c reports, and kidney function tests are all supported</p>
           <input
             ref={fileInputRef}
             type="file"

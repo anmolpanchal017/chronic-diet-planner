@@ -28,26 +28,26 @@ export default function Sidebar() {
   const isActive = (href: string) => pathname === href
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-slate-900 border-r border-slate-700/50 shadow-lg shadow-emerald-500/10 z-40 flex flex-col">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 shadow-lg shadow-emerald-500/10 z-40 flex flex-col">
       {/* Header Logo */}
-      <div className="p-6 border-b border-slate-700/50">
+      <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <Leaf className="w-6 h-6 text-white" />
+            <Leaf className="w-6 h-6 text-gray-900" />
           </div>
           <div>
-            <div className="font-bold text-white">NutriPlan AI</div>
-            <div className="text-xs text-slate-400">Clinical Sanctuary</div>
+            <div className="font-bold text-gray-900">NutriPlan AI</div>
+            <div className="text-xs text-gray-600">Clinical Sanctuary</div>
           </div>
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="px-4 py-4 border-b border-slate-700/50">
+      <div className="px-4 py-4 border-b border-gray-200">
         <input
           type="text"
           placeholder="Search health metrics..."
-          className="w-full px-4 py-2 rounded-lg bg-slate-800 text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full px-4 py-2 rounded-lg bg-white text-gray-800 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
       </div>
 
@@ -64,7 +64,7 @@ export default function Sidebar() {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 font-medium ${
                   active
                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-400/50'
-                    : 'text-slate-300 hover:bg-slate-800/60 hover:text-emerald-400'
+                    : 'text-gray-700 hover:bg-gray-100/60 hover:text-emerald-400'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -75,11 +75,11 @@ export default function Sidebar() {
         </div>
 
         {/* Settings Section */}
-        <div className="mt-8 pt-6 border-t border-slate-700/50">
-          <h4 className="text-xs font-semibold text-slate-500 uppercase px-4 mb-3">Settings</h4>
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <h4 className="text-xs font-semibold text-gray-500 uppercase px-4 mb-3">Settings</h4>
           <Link
             href="/settings"
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-slate-400 hover:bg-slate-800/50`}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-gray-600 hover:bg-gray-100/50`}
           >
             <Settings className="w-5 h-5" />
             <span>Settings</span>
@@ -88,20 +88,20 @@ export default function Sidebar() {
       </nav>
 
       {/* User Profile & Footer */}
-      <div className="border-t border-slate-700/50 p-4">
-        <div className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg mb-3 border border-slate-700/50">
+      <div className="border-t border-gray-200 p-4">
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg mb-3 border border-gray-200">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <User className="w-5 h-5 text-white" />
+            <User className="w-5 h-5 text-gray-900" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-sm text-white truncate">{state.userProfile.fullName || 'User'}</div>
-            <div className="text-xs text-slate-400 truncate">{state.userProfile.conditions?.[0] || 'No plan'}</div>
+            <div className="font-medium text-sm text-gray-900 truncate">{state.userProfile.fullName || 'User'}</div>
+            <div className="text-xs text-gray-600 truncate">{state.userProfile.conditions?.[0] || 'No plan'}</div>
           </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-slate-400 hover:bg-red-600/20 hover:text-red-300 transition-all duration-200"
+          className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-red-600/20 hover:text-red-300 transition-all duration-200"
         >
           <LogOut className="w-5 h-5" />
           <span className="text-sm">Logout</span>

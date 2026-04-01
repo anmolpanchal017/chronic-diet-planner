@@ -21,7 +21,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-white" />
+              <Leaf className="w-5 h-5 text-gray-900" />
             </div>
             <span className="font-bold text-lg gradient-text hidden sm:inline">NutriPlan AI</span>
           </Link>
