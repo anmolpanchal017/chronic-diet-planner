@@ -35,9 +35,9 @@ const mealTypeLabels = {
 
 export function TodayMealCard({ meal, onSwap, onView }: TodayMealCardProps) {
   return (
-    <div className="card overflow-hidden hover:shadow-emerald-500/20 hover:border-emerald-500/50 transition-all duration-300 group cursor-pointer bg-white border border-gray-200">
+    <div className="card overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 hover:border-emerald-200 transition-all duration-300 group cursor-pointer bg-white border border-gray-200">
       {/* Image Container */}
-      <div className="relative h-40 bg-slate-700 overflow-hidden">
+      <div className="relative h-40 bg-gray-100 overflow-hidden">
         {meal.image_url ? (
           <img
             src={meal.image_url}
@@ -50,17 +50,17 @@ export function TodayMealCard({ meal, onSwap, onView }: TodayMealCardProps) {
           </div>
         )}
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-gray-100/90 transition-all duration-300" />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300" />
 
         {/* Meal Type Badge */}
-        <div className="absolute top-3 left-3 bg-white/90 border border-gray-300 px-3 py-1 rounded-full text-xs font-semibold text-gray-800 shadow-md">
+        <div className="absolute top-3 left-3 bg-white border border-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 shadow-sm">
           {mealTypeLabels[meal.type]}
         </div>
       </div>
 
       {/* Content */}
       <div className="p-4">
-        <h4 className="font-bold text-gray-900 mb-2 group-hover:text-emerald-400 transition-colors">{meal.name}</h4>
+        <h4 className="font-bold text-gray-900 mb-2 group-hover:text-emerald-700 transition-colors">{meal.name}</h4>
 
         {/* Stats */}
         <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">

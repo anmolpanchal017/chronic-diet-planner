@@ -33,7 +33,7 @@ export default function Sidebar() {
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <Leaf className="w-6 h-6 text-gray-900" />
+            <Leaf className="w-6 h-6 text-white" />
           </div>
           <div>
             <div className="font-bold text-gray-900">NutriPlan AI</div>
@@ -63,8 +63,8 @@ export default function Sidebar() {
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 font-medium ${
                   active
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-400/50'
-                    : 'text-gray-700 hover:bg-gray-100/60 hover:text-emerald-400'
+                    ? 'bg-emerald-50 text-emerald-700 shadow-sm border border-emerald-100'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -91,7 +91,7 @@ export default function Sidebar() {
       <div className="border-t border-gray-200 p-4">
         <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg mb-3 border border-gray-200">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <User className="w-5 h-5 text-gray-900" />
+            <User className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="font-medium text-sm text-gray-900 truncate">{state.userProfile.fullName || 'User'}</div>
